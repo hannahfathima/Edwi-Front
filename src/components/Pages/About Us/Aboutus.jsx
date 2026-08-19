@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../../Navbar/Navbar';
 import EdhwiMoments from '../../EdhwiMoments/EdhwiMoments';
 import OurProcess from '../../OurProcess/OurProcess';
@@ -99,9 +100,11 @@ const Aboutus = () => {
                                 We don’t just make products.
                                 We nurture a promise — of quality, sustainability, and the timeless goodness of nature..
                             </p>
-                            <button className="btn-know-more">
-                                Explore Products
-                            </button>
+                            <Link to="/our-products">
+                                <button className="btn-know-more">
+                                    Explore Products
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
