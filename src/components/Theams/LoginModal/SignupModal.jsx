@@ -2,16 +2,20 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signupWithEmail } from '../../../redux/slices/authSlice';
 import './LoginModal.scss'; // Assuming we re-use same modal styles
-import { FiX } from 'react-icons/fi';
+import { FiX, FiEye, FiEyeOff } from 'react-icons/fi';
 
 const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: initialEmail,
         password: '',
+        confirmPassword: '',
         agreeToTerms: false,
         subscribeToEmails: false
     });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [localError, setLocalError] = useState('');
 
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.auth);
@@ -24,12 +28,20 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
             ...formData,
             [name]: type === 'checkbox' ? checked : value
         });
+        setLocalError('');
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLocalError('');
 
-        const resultAction = await dispatch(signupWithEmail(formData));
+        if (formData.password !== formData.confirmPassword) {
+            setLocalError('Passwords do not match');
+            return;
+        }
+
+        const { confirmPassword, ...signupData } = formData;
+        const resultAction = await dispatch(signupWithEmail(signupData));
 
         if (resultAction.payload?.success) {
             onSuccess(); // Close modal on success
@@ -82,15 +94,50 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
 
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                className="form-control"
-                                required
-                            />
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    id="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Enter password"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className="password-toggle-btn"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="confirmPassword">Confirm Password</label>
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Confirm password"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className="password-toggle-btn"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                                >
+                                    {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                                </button>
+                            </div>
                         </div>
 
                         <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginTop: "4px" }}>
@@ -122,9 +169,9 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
                             </label>
                         </div>
 
-                        {error && (
+                        {(error || localError) && (
                             <div style={{ color: "red", fontSize: "12px" }}>
-                                {error}
+                                {error || localError}
                             </div>
                         )}
 

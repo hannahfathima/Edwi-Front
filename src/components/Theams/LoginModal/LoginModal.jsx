@@ -79,13 +79,13 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
 
                     <form className="login-modal__form" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="loginId">Enter Mobile Number / Email*</label>
+                            <label htmlFor="loginId">Enter Mobile Number*</label>
                             <input
                                 type="text"
                                 id="loginId"
                                 value={loginId}
                                 onChange={(e) => { setLoginId(e.target.value); setLocalError(''); }}
-                                placeholder="Email or Mobile"
+                                placeholder="Mobile Number"
                                 className="form-control"
                                 required
                             />
