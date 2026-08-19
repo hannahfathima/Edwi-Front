@@ -1,0 +1,139 @@
+.cart-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 5rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #eaeaea;
+    font-family: inherit;
+
+    .cart-navbar-left {
+        display: flex;
+        align-items: center;
+
+        .logo-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                height: 48px;
+                object-fit: contain;
+            }
+        }
+    }
+
+    .cart-navbar-center {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .stepper-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+
+            .step-icon-wrapper {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #e5f7fd; // light cyan for inactive
+                color: #555555; // dark grey icon
+                font-size: 1.1rem;
+                transition: all 0.3s ease;
+            }
+
+            .step-label {
+                font-size: 1rem;
+                color: #777777; // grey text for inactive
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
+
+            &.active {
+                .step-icon-wrapper {
+                    background-color: #00bfff; // vivid blue/cyan
+                    color: #ffffff; // white icon
+                }
+
+                .step-label {
+                    color: #1a1a1a;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        .stepper-line {
+            width: 45px;
+            height: 0;
+            border-top: 2px dotted #a0baf8; // blue dashed line
+            margin: 0 0.5rem;
+        }
+    }
+
+    .cart-navbar-right {
+        display: flex;
+        align-items: center;
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+
+            .security-icon {
+                color: #22c55e; // green check circle
+                font-size: 2rem;
+            }
+
+            .security-text {
+                display: flex;
+                flex-direction: column;
+                color: #333333;
+                line-height: 1.3;
+
+                strong {
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    color: #1a1a1a;
+                }
+
+                span {
+                    font-size: 0.85rem;
+                    color: #555555;
+                }
+            }
+        }
+    }
+
+    // Responsive adjustments
+    @media (max-width: 1024px) {
+        padding: 1rem 2.5rem;
+    }
+
+    @media (max-width: 860px) {
+        padding: 1rem 1.5rem;
+
+        .cart-navbar-right {
+            display: none; // hide security badge on smaller screens
+        }
+    }
+
+    @media (max-width: 500px) {
+        flex-direction: column;
+        gap: 1.2rem;
+        padding: 1rem;
+
+        .cart-navbar-center {
+            .step-label {
+                display: none; // icon only for very small screens
+            }
+
+            .stepper-line {
+                width: 30px;
+            }
+        }
+    }
+}

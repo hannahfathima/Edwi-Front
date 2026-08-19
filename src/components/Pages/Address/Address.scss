@@ -1,0 +1,162 @@
+.address-page-container {
+    background-color: #FFFFFF;
+    min-height: 100vh;
+    padding-bottom: 50px;
+}
+
+.address-content-wrapper {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 20px 5%;
+}
+
+.address-page-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 20px 0 30px;
+}
+
+.address-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    align-items: start;
+}
+
+/* Left Section: Address List / Form */
+.address-items-section {
+    background: transparent;
+    border-radius: 8px;
+}
+
+/* Address Card */
+.address-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.address-card.selected {
+    border-color: #184bc6;
+    background-color: #f8faff;
+}
+
+.address-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.address-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.address-radio-label input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #184bc6;
+    cursor: pointer;
+}
+
+.address-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.address-type-badge {
+    background: #f0f0f0;
+    color: #555;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.address-details {
+    padding-left: 35px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.edit-address-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #184bc6;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+}
+
+.edit-address-btn:hover {
+    text-decoration: underline;
+}
+
+.add-new-btn {
+    background: #fff;
+    border: 1px solid #184bc6;
+    color: #184bc6;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+
+
+/* Right Section */
+.address-summary-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Tablet & Mobile Responsiveness */
+@media (max-width: 991px) {
+    .address-main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .address-content-wrapper {
+        padding: 15px 16px;
+    }
+
+    .address-page-title {
+        font-size: 20px;
+        margin: 10px 0 20px;
+    }
+
+    .address-card {
+        padding: 15px;
+    }
+
+    .address-card-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .address-type-badge {
+        align-self: flex-start;
+        margin-left: 35px;
+    }
+}

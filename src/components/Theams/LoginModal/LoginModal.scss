@@ -1,0 +1,296 @@
+@keyframes fadeOverlay {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideModal {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.login-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Dimmed background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    /* High z-index to stay on top of navbar/content */
+    animation: fadeOverlay 0.4s ease-out forwards;
+    padding: 20px;
+    box-sizing: border-box;
+
+    @media (max-width: 576px) {
+        padding: 10px;
+    }
+}
+
+.login-modal-content {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    display: flex;
+    width: 100%;
+    max-width: 800px;
+    /* Adjust based on image proportions */
+    height: 550px;
+    max-height: 90vh;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: slideModal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        height: auto;
+        max-height: 85vh;
+    }
+}
+
+.login-modal__image-wrapper {
+    flex: 1;
+    /* Takes up half the modal */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f8f8;
+    /* fallback color */
+
+    @media (max-width: 768px) {
+        display: none;
+        /* Hide image on smaller screens */
+    }
+}
+
+.login-modal__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+
+    /* Ensures the image sits correctly in the center */
+}
+
+.login-modal__form-wrapper {
+    flex: 1;
+    /* Takes up the other half */
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    max-height: 100%;
+    box-sizing: border-box;
+
+    @media (max-width: 768px) {
+        padding: 30px 24px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 24px 16px;
+    }
+}
+
+.login-modal__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: #4A4A4A;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    z-index: 10;
+
+    &:hover {
+        color: #000;
+    }
+
+    @media (max-width: 480px) {
+        top: 15px;
+        right: 15px;
+    }
+}
+
+.login-modal__header {
+    margin-bottom: 30px;
+
+    @media (max-width: 768px) {
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        font-family: "General Sans", sans-serif-serif;
+        font-weight: 600;
+        font-size: 32px;
+        /* Scaled up to match prominent image size */
+        color: #1A202C;
+        margin-bottom: 8px;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+
+        @media (max-width: 768px) {
+            font-size: 26px;
+        }
+
+        .text-blue {
+            background: linear-gradient(to right, #155de2, #1A202C);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+        }
+    }
+
+    p {
+        font-family: General, sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 130%;
+        letter-spacing: -2%;
+        color: #1B1919;
+        margin: 0;
+
+        @media (max-width: 768px) {
+            font-size: 14px;
+        }
+    }
+}
+
+.login-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    @media (max-width: 480px) {
+        gap: 10px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-family: General, sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 110.00000000000001%;
+        letter-spacing: 0%;
+
+        label {
+            font-family: General, sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 110.00000000000001%;
+            letter-spacing: 0%;
+            color: #121213;
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1F2937;
+            outline: none;
+            transition: border-color 0.2s ease;
+
+            @media (max-width: 480px) {
+                padding: 10px 12px;
+            }
+
+            &:focus {
+                border-color: #1D5ED5;
+            }
+
+            &::placeholder {
+                color: #9CA3AF;
+            }
+        }
+    }
+}
+
+.login-modal__submit-btn {
+    margin-top: 10px;
+    padding: 12px;
+    background-color: #1D5ED5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: #1646a3;
+    }
+}
+
+.login-modal__divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 25px 0;
+
+    &::before,
+    &::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #E5E7EB;
+    }
+
+    span {
+        padding: 0 10px;
+        color: #9CA3AF;
+        font-size: 12px;
+        font-weight: 600;
+    }
+}
+
+.login-modal__social-logins {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #E5E7EB;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #4B5563;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: #F9FAFB;
+        }
+
+        .social-icon {
+            flex-shrink: 0;
+        }
+    }
+}

@@ -1,0 +1,231 @@
+.edit-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; // Above navbar
+}
+
+.edit-modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    @media (max-width: 576px) {
+        width: 95%;
+        padding: 16px;
+        gap: 16px;
+    }
+
+    &.inline-form {
+        width: 100%;
+        max-width: 100%;
+        box-shadow: none;
+        padding: 0;
+        border-radius: 0;
+    }
+}
+
+.edit-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+        color: #1a1a1a;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background 0.2s;
+
+        &:hover {
+            background: #f0f0f0;
+        }
+    }
+}
+
+.edit-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .form-row {
+        display: flex;
+        gap: 16px;
+
+        @media (max-width: 576px) {
+            flex-direction: column;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .modal-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+
+            &:focus {
+                border-color: #13368e;
+            }
+
+            &.error {
+                border-color: #dc3545;
+            }
+        }
+
+        .error-text {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: -4px;
+        }
+
+        .phone-input-wrapper {
+            width: 100%;
+
+            .react-tel-input .form-control {
+                border-color: #ddd;
+                font-family: inherit;
+                border-radius: 8px;
+
+                &:focus {
+                    border-color: #13368e;
+                    box-shadow: none;
+                }
+            }
+
+            .react-tel-input .flag-dropdown {
+                border-color: #ddd;
+                background-color: #f8f9fa;
+                border-radius: 8px 0 0 8px;
+            }
+        }
+    }
+
+    .address-type {
+        margin-top: 8px;
+
+        .type-selector {
+            display: flex;
+            gap: 12px;
+
+            .type-btn {
+                padding: 8px 24px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background: #fff;
+                color: #666;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+
+                &.active {
+                    background: #13368e;
+                    color: #fff;
+                    border-color: #13368e;
+                }
+
+                &:hover:not(.active) {
+                    background: #f8f9fa;
+                }
+            }
+        }
+    }
+}
+
+.edit-modal-footer {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+
+    &.inline-footer {
+        margin-top: 24px;
+    }
+
+    button {
+        flex: 1;
+        padding: 14px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .cancel-btn {
+        background: #fff;
+        border: 1px solid #13368e;
+        color: #13368e;
+
+        &:hover {
+            background: #f8f9fa;
+        }
+    }
+
+    .save-btn {
+        background: #13368e;
+        border: 1px solid #13368e;
+        color: #fff;
+
+        &.full-width {
+            flex: none;
+            width: 100%;
+            background: #184bc6;
+            border-color: #184bc6;
+            padding: 16px;
+        }
+
+        &:hover:not(:disabled) {
+            background: #0f2c73;
+        }
+
+        &:disabled {
+            background: #a0b0d9;
+            border-color: #a0b0d9;
+            cursor: not-allowed;
+        }
+    }
+}

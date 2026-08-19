@@ -1,0 +1,209 @@
+.coupon-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(30, 30, 30, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    .coupon-modal-content {
+        background: #ffffff;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 400px;
+        /* Reduced to match the image width */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 24px 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+
+            h2 {
+                margin: 0;
+                font-size: 20px;
+                font-family: "General Sans", sans-serif;
+                font-weight: 600;
+                color: #1b1919;
+            }
+
+            .close-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: #212529;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+        }
+
+        .modal-body {
+            padding: 24px;
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 60vh;
+
+            /* Custom scrollbar */
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: #e0e0e0;
+                border-radius: 4px;
+            }
+
+            .coupon-input-wrapper {
+                position: relative;
+                margin-bottom: 24px;
+
+                input {
+                    width: 100%;
+                    padding: 12px 16px;
+                    border: 1px solid #d0d0d0;
+                    border-radius: 6px;
+                    color: #333;
+                    outline: none;
+                    background-color: transparent;
+
+                    &::placeholder {
+                        color: #767676;
+                        font-size: 16px;
+                        font-family: "General Sans", sans-serif;
+                        font-weight: 500;
+                    }
+
+                    &:focus {
+                        border-color: #212529;
+                    }
+                }
+
+                .check-text {
+                    position: absolute;
+                    right: 16px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #212529;
+                    cursor: pointer;
+                    text-decoration: underline;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            .unlock-heading {
+                font-size: 16px;
+                font-family: "General Sans", sans-serif;
+                color: #555;
+                margin-bottom: 16px;
+                font-weight: 400;
+            }
+
+            .coupons-list {
+                display: flex;
+                flex-direction: column;
+
+                .coupon-divider {
+                    height: 1px;
+                    background-color: #f0f0f0;
+                    margin: 16px 0 20px 0;
+                }
+
+                .coupon-item {
+                    display: flex;
+                    align-items: flex-start;
+
+                    .coupon-checkbox {
+                        margin-top: 10px;
+                        margin-right: 16px;
+                        width: 16px;
+                        height: 16px;
+                        cursor: pointer;
+                        accent-color: #212529;
+                        /* Modern checkbox color */
+                    }
+
+                    .coupon-details {
+                        display: flex;
+                        flex-direction: column;
+
+                        .coupon-code-box {
+                            display: inline-block;
+                            padding: 6px 14px;
+                            border: 1px dashed #ffa07a;
+                            background-color: #fff9f6;
+                            color: #ff7f50;
+                            font-size: 13px;
+                            font-weight: 600;
+                            border-radius: 4px;
+                            margin-bottom: 12px;
+                            width: max-content;
+                            letter-spacing: 0.5px;
+                        }
+
+                        .coupon-save {
+                            font-size: 13px;
+                            font-weight: 600;
+                            color: #2d68f8;
+                            margin-bottom: 8px;
+                        }
+
+                        .coupon-desc,
+                        .coupon-expires {
+                            font-size: 14px;
+                            color: #555;
+                            line-height: 1.6;
+                        }
+
+                        .coupon-expires {
+                            margin-top: 2px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+
+            .apply-coupon-btn {
+                width: 100%;
+                padding: 14px;
+                background-color: #2d68f8;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background-color 0.2s;
+
+                &:hover {
+                    background-color: #1a56e8;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,163 @@
+/* Variables for premium feel */
+$primary-color: #1e3a8a; // deeply blue from their logo logic
+$primary-light: #eff6ff;
+$secondary-color: #00bcd4; // cyan from profile icon
+$cyan-light: #e0f7fa;
+$text-dark: #1f2937;
+$text-gray: #6b7280;
+$text-light: #9ca3af;
+$border-color: #e5e7eb;
+$yellow-acc: #facc15;
+$yellow-bg: #fef08a;
+$danger-color: #ef4444;
+
+.my-account-page {
+    background-color: white;
+    /* Soft light background for the page */
+    min-height: 100vh;
+    margin-top: 10vh;
+    padding: 2rem 0 4rem;
+}
+
+.my-account-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 4%;
+    box-sizing: border-box;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: $text-gray;
+    margin-bottom: 1.5rem;
+
+    .breadcrumb-icon {
+        font-size: 1rem;
+    }
+
+    .current {
+        color: $text-dark;
+        font-weight: 500;
+    }
+}
+
+/* Page Title */
+.page-title {
+    font-size: 2.25rem;
+    font-weight: 600;
+    color: $text-dark;
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.02em;
+
+    span {
+        color: $primary-color;
+    }
+}
+
+/* Layout Grid */
+.account-layout {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 2rem;
+    }
+}
+
+/* Sidebar */
+.account-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    position: sticky;
+    top: 2rem;
+    align-self: flex-start;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        position: relative;
+        top: 0;
+    }
+
+    @media (max-width: 540px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sidebar-section {
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+
+    &:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: $text-dark;
+        margin-bottom: 1.25rem;
+        cursor: pointer;
+
+        &.active {
+            color: #1e40af;
+            /* Deeper blue exactly like Figma */
+            font-size: 1.2rem;
+        }
+    }
+
+    .section-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        a {
+            color: $text-gray;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+
+            &:hover {
+                color: $primary-color;
+            }
+
+            &.active-link {
+                color: $text-dark;
+                font-weight: 400;
+            }
+        }
+    }
+}
+
+/* Main Content */
+.account-content {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.dashboard-section {
+    margin-bottom: 3rem;
+
+    .section-heading {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: $text-gray;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 1.25rem;
+    }
+}

@@ -1,0 +1,219 @@
+.edhwi-moments-section {
+    padding: 80px 20px;
+    background-color: #ffffff;
+    overflow: hidden;
+
+    .moments-container {
+        max-width: 1700px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .title {
+        font-family: 'Inter Tight', sans-serif;
+        font-weight: 700;
+        font-size: 56px;
+        line-height: 1.1;
+        letter-spacing: -2px;
+        margin-bottom: 60px;
+        text-align: left;
+        background: linear-gradient(to left, #246dff, #1c1c1ce1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+
+    }
+
+    /* Auto-scrolling Carousel Styles */
+    .carousel-wrapper {
+        width: 100%;
+        overflow: hidden; // Hide the scrollbar and overflowing images
+        position: relative;
+        padding-bottom: 50px;
+
+        // Gradient masks for smooth fading at the edges of the carousel
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        &::before {
+            left: 0;
+            // background: linear-gradient(to right, rgba(255, 255, 255, 0.226) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        &::after {
+            right: 0;
+            // background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        .carousel-track {
+            display: flex;
+            width: calc(320px * 8); // Assuming 4 images originally, duplicated to 8. Adjust base width if needed
+            animation: scroll 20s linear infinite;
+            gap: 24px;
+
+            &:hover {
+                animation-play-state: paused; // Pause scrolling on hover
+            }
+        }
+
+        .carousel-slide {
+            flex-shrink: 0;
+            width: 300px;
+            height: 400px; // Standardized height
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
+            .image-placeholder {
+                width: 100%;
+                height: 100%;
+                background-color: #f0f4f8; // Light placeholder color before image drops
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover; // Ensure image covers the box
+                    transition: transform 0.4s ease;
+
+                    &:hover {
+                        transform: scale(1.05);
+                    }
+                }
+            }
+        }
+    }
+
+    // Keyframes for infinite scrolling
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            // Translating by exactly half the track's width (which contains 1 set of the images) + a gap compensation
+            transform: translateX(calc(-50% - 12px));
+        }
+    }
+
+    /* Bottom Family Section */
+    .family-section {
+        margin-top: 60px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .family-title {
+            font-family: "General Sans", sans-serif;
+            font-weight: 600;
+            font-style: Semibold;
+            font-size: 32px;
+            leading-trim: NONE;
+            line-height: 100%;
+            letter-spacing: -2%;
+            text-align: center;
+            color: #000000;
+            margin-bottom: 12px;
+        }
+
+        .family-description {
+            font-family: "General Sans", sans-serif;
+            font-weight: 400;
+            font-style: Regular;
+            font-size: 20px;
+            leading-trim: NONE;
+            line-height: 130%;
+            letter-spacing: -2%;
+            text-align: center;
+            color: #1B1919;
+            margin-bottom: 24px;
+        }
+
+        .instagram-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #1B1919;
+            font-family: "General Sans", sans-serif;
+            font-weight: 500;
+            font-size: 18px;
+            transition: opacity 0.3s ease;
+
+            &:hover {
+                opacity: 0.8;
+            }
+
+            .insta-icon {
+                width: 24px;
+                height: 24px;
+                // If there's no instagram svg yet, create a fallback style using a background or border
+                background-color: transparent;
+            }
+
+            .insta-text {
+                font-family: '"General Sans", sans-serif', sans-serif;
+                font-weight: 1200;
+                font-style: Medium;
+                font-size: 26.67px;
+                leading-trim: NONE;
+                line-height: 100%;
+                letter-spacing: -2%;
+                text-decoration: underline;
+                text-decoration-style: solid;
+                text-decoration-offset: 0%;
+                text-decoration-thickness: 0%;
+                text-decoration-skip-ink: auto;
+                color: #1B1919;
+
+            }
+        }
+    }
+
+    // Responsiveness
+    @media (max-width: 768px) {
+        padding: 50px 20px;
+
+        .title {
+            font-size: 40px;
+            margin-bottom: 40px;
+        }
+
+        .carousel-wrapper {
+            .carousel-slide {
+                width: 260px;
+                height: 340px;
+            }
+
+            &::before,
+            &::after {
+                width: 50px;
+            }
+        }
+
+        .family-section {
+            .family-title {
+                font-size: 20px;
+            }
+
+            .family-description {
+                font-size: 14px;
+
+                br {
+                    display: none; // let it wrap naturally on mobile
+                }
+            }
+        }
+    }
+}

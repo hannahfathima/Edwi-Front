@@ -1,0 +1,110 @@
+.toast-modal-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    animation: slideInRight 0.3s ease-out forwards;
+    
+    &.show {
+        display: block;
+    }
+
+    .toast-modal {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        background-color: #fff;
+        min-width: 300px;
+        border-left: 4px solid;
+
+        &.success {
+            border-left-color: #4CAF50;
+            .toast-icon {
+                color: #4CAF50;
+            }
+        }
+
+        &.error {
+            border-left-color: #f44336;
+            .toast-icon {
+                color: #f44336;
+            }
+        }
+
+        .toast-icon {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .toast-content {
+            flex-grow: 1;
+
+            .toast-message {
+                margin: 0;
+                font-size: 15px;
+                color: #333;
+                font-weight: 500;
+                font-family: inherit;
+            }
+        }
+
+        .toast-close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: #333;
+            }
+        }
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .toast-modal-container {
+        top: 20px;
+        right: 50%;
+        transform: translateX(50%);
+        animation: slideDownMobile 0.3s ease-out forwards;
+        width: 90%;
+        max-width: 400px;
+        
+        .toast-modal {
+            min-width: unset;
+            width: 100%;
+        }
+    }
+
+    @keyframes slideDownMobile {
+        from {
+            transform: translate(50%, -100%);
+            opacity: 0;
+        }
+        to {
+            transform: translate(50%, 0);
+            opacity: 1;
+        }
+    }
+}
