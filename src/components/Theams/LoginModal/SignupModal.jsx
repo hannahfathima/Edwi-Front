@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signupWithEmail } from '../../../redux/slices/authSlice';
 import './LoginModal.scss'; // Assuming we re-use same modal styles
@@ -19,6 +19,18 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
 
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
 
     if (!isOpen) return null;
 

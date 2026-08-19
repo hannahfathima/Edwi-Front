@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendMobileOtp, sendEmailOtp, loginWithGoogle } from '../../../redux/slices/authSlice';
 import './LoginModal.scss';
@@ -12,6 +12,18 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
 
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
 
     const login = useGoogleLogin({
         onSuccess: async (tokenResponse) => {

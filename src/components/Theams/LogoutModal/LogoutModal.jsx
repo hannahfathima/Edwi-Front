@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './LogoutModal.scss';
 import { FiX, FiLogOut } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
@@ -6,6 +6,18 @@ import { logout } from '../../../redux/slices/authSlice';
 
 const LogoutModal = ({ isOpen, onClose }) => {
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
 
     if (!isOpen) return null;
 

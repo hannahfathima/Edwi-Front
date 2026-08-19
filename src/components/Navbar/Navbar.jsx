@@ -31,6 +31,20 @@ const Navbar = ({ setCurrentPage }) => {
         }
     }, [dispatch, token]);
 
+    const isAnyModalOpen = isLoginModalOpen || isOtpModalOpen || isSignupModalOpen || isLogoutModalOpen;
+
+    React.useEffect(() => {
+        if (isAnyModalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isAnyModalOpen]);
+
     // 🔥 NEW: Get current route
     const location = useLocation();
 

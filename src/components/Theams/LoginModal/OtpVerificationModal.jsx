@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifyMobileOtp, verifyEmailOtp } from '../../../redux/slices/authSlice';
 import './LoginModal.scss'; // Assuming we re-use same modal styles
@@ -11,6 +11,18 @@ const OtpVerificationModal = ({ isOpen, onClose, onSuccess, formData }) => {
 
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
