@@ -66,9 +66,9 @@ const OtpVerificationModal = ({ isOpen, onClose, onSuccess, formData }) => {
                         <FiX />
                     </button>
 
-                    <div className="login-modal__header" style={{ marginBottom: "2rem" }}>
+                    <div className="login-modal__header">
                         <h2><span className="text-blue">Glad</span> you're back!</h2>
-                        <p style={{ marginTop: "10px" }}>Verify with OTP sent to {formData?.value}</p>
+                        <p>Verify with OTP sent to {formData?.value}</p>
                     </div>
 
                     <form className="login-modal__form" onSubmit={handleSubmit}>

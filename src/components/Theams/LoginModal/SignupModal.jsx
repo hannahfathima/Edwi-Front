@@ -48,14 +48,14 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
                         <FiX />
                     </button>
 
-                    <div className="login-modal__header" style={{ marginBottom: "1.5rem" }}>
+                    <div className="login-modal__header">
                         <h2><span className="text-blue">Welcome</span> to Edhwi</h2>
-                        <p style={{ marginTop: "10px" }}>Your account for everything Edhwi!</p>
+                        <p>Your account for everything Edhwi!</p>
                     </div>
 
-                    <form className="login-modal__form" onSubmit={handleSubmit} style={{ gap: "10px" }}>
-                        <div className="form-group" style={{ marginBottom: "15px" }}>
-                            <label htmlFor="name" style={{ fontSize: "14px", fontWeight: "500", color: "#333", marginBottom: "8px", display: "block" }}>Name</label>
+                    <form className="login-modal__form" onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="name">Name</label>
                             <input
                                 type="text"
                                 id="name"
@@ -67,8 +67,8 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
                             />
                         </div>
 
-                        <div className="form-group" style={{ marginBottom: "15px" }}>
-                            <label htmlFor="email" style={{ fontSize: "14px", fontWeight: "500", color: "#333", marginBottom: "8px", display: "block" }}>Email address</label>
+                        <div className="form-group">
+                            <label htmlFor="email">Email address</label>
                             <input
                                 type="email"
                                 id="email"
@@ -80,8 +80,8 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
                             />
                         </div>
 
-                        <div className="form-group" style={{ marginBottom: "20px" }}>
-                            <label htmlFor="password" style={{ fontSize: "14px", fontWeight: "500", color: "#333", marginBottom: "8px", display: "block" }}>Password</label>
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
                             <input
                                 type="password"
                                 id="password"
@@ -93,37 +93,37 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
                             />
                         </div>
 
-                        <div style={{ marginBottom: "10px", display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginTop: "4px" }}>
                             <input
                                 type="checkbox"
                                 id="agreeToTerms"
                                 name="agreeToTerms"
                                 checked={formData.agreeToTerms}
                                 onChange={handleChange}
-                                style={{ transform: "scale(1.2)", marginTop: "2px" }}
+                                style={{ transform: "scale(1.1)", marginTop: "2px", cursor: "pointer" }}
                                 required
                             />
-                            <label htmlFor="agreeToTerms" style={{ fontSize: "12px", color: "#555" }}>
+                            <label htmlFor="agreeToTerms" style={{ fontSize: "12px", color: "#555", cursor: "pointer", lineHeight: "1.3" }}>
                                 By signing up, I agree to <span style={{ color: "#1877F2" }}>Terms and Conditions</span>
                             </label>
                         </div>
 
-                        <div style={{ marginBottom: "20px", display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
                             <input
                                 type="checkbox"
                                 id="subscribeToEmails"
                                 name="subscribeToEmails"
                                 checked={formData.subscribeToEmails}
                                 onChange={handleChange}
-                                style={{ transform: "scale(1.2)", marginTop: "2px" }}
+                                style={{ transform: "scale(1.1)", marginTop: "2px", cursor: "pointer" }}
                             />
-                            <label htmlFor="subscribeToEmails" style={{ fontSize: "12px", color: "#555" }}>
+                            <label htmlFor="subscribeToEmails" style={{ fontSize: "12px", color: "#555", cursor: "pointer", lineHeight: "1.3" }}>
                                 I agree to subscribe to receive Edhwi emails.
                             </label>
                         </div>
 
                         {error && (
-                            <div style={{ color: "red", fontSize: "12px", marginBottom: "15px" }}>
+                            <div style={{ color: "red", fontSize: "12px" }}>
                                 {error}
                             </div>
                         )}
