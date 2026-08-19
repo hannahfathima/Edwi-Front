@@ -44,15 +44,16 @@
 
 .login-modal-content {
     background-color: #FFFFFF;
-    border-radius: 12px;
+    border-radius: 24px;
     display: flex;
     width: 100%;
-    max-width: 800px;
-    /* Adjust based on image proportions */
-    height: 550px;
+    max-width: 820px;
+    height: 560px;
     max-height: 90vh;
     overflow: hidden;
     position: relative;
+    padding: 10px;
+    box-sizing: border-box;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     animation: slideModal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 
@@ -60,6 +61,7 @@
         flex-direction: column;
         height: auto;
         max-height: 85vh;
+        padding: 10px;
     }
 }
 
@@ -71,7 +73,8 @@
     align-items: center;
     justify-content: center;
     background-color: #f8f8f8;
-    /* fallback color */
+    border-radius: 16px;
+    /* Inset rounded image card matching Figma */
 
     @media (max-width: 768px) {
         display: none;
@@ -84,6 +87,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+    border-radius: 16px;
 
     /* Ensures the image sits correctly in the center */
 }
@@ -91,7 +95,7 @@
 .login-modal__form-wrapper {
     flex: 1;
     /* Takes up the other half */
-    padding: 40px;
+    padding: 24px 32px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -100,11 +104,11 @@
     box-sizing: border-box;
 
     @media (max-width: 768px) {
-        padding: 30px 24px;
+        padding: 20px 16px;
     }
 
     @media (max-width: 480px) {
-        padding: 24px 16px;
+        padding: 16px 12px;
     }
 }
 
