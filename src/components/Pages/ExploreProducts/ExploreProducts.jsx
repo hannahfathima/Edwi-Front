@@ -388,9 +388,13 @@ const ExploreProducts = () => {
                                                     </div>
                                                     <div className="product-details">
                                                         <h3>{product.name}</h3>
-                                                        {product.variantCombinations?.length > 0 && (
-                                                            <p className='Available-section'>Available in <b>{product.variantCombinations?.[0]?.weight || product.variantCombinations?.[0]?.volume || product.variantCombinations?.[0]?.amount || ''}</b></p>
-                                                        )}
+                                                        <p className='Available-section'>
+                                                            {product.variantCombinations?.length > 0 ? (
+                                                                <>Available in <b>{product.variantCombinations?.[0]?.weight || product.variantCombinations?.[0]?.volume || product.variantCombinations?.[0]?.amount || ''}</b></>
+                                                            ) : (
+                                                                '\u00A0'
+                                                            )}
+                                                        </p>
                                                         <div className="price-details-card">
                                                             {(() => {
                                                                 const displayPrice = product.sellingPrice || product.price || 0;
