@@ -131,7 +131,7 @@
             font-weight: 500;
           }
 
-          input,
+          input:not(.phone-input),
           textarea {
             width: 100%;
             padding: 12px 15px;
@@ -146,10 +146,26 @@
               border-color: #1b1919;
               color: #1B1919;
             }
+
+            &.error {
+              border-color: #e53935 !important;
+            }
           }
 
           textarea {
             resize: vertical;
+          }
+
+          .input-group {
+            display: flex;
+            flex-direction: column;
+
+            .error-text {
+              color: #e53935;
+              font-size: 0.8rem;
+              margin-top: 4px;
+              font-weight: 500;
+            }
           }
 
           .row-group {
@@ -161,18 +177,100 @@
             }
           }
 
-          .phone-input {
+          .phone-container {
             width: 100% !important;
-            padding-left: 50px !important;
-            height: 44px !important;
-            border: 1px solid #ccc !important;
+            background: #ffffff !important;
+            border: 1px solid #ffffff !important;
             border-radius: 8px !important;
-          }
+            transition: border-color 0.2s ease-in-out !important;
+            box-sizing: border-box !important;
 
-          .phone-dropdown {
-            border: 1px solid #ccc !important;
-            border-radius: 8px 0 0 8px !important;
-            background: #fff !important;
+            &.error {
+              border-color: #e53935 !important;
+            }
+
+            &:focus-within {
+              border-color: #1b1919 !important;
+            }
+
+            .phone-input {
+              width: 100% !important;
+              height: 42px !important;
+              padding-left: 52px !important;
+              padding-right: 15px !important;
+              border: none !important;
+              border-radius: 8px !important;
+              font-size: 0.9rem !important;
+              font-family: inherit !important;
+              background: transparent !important;
+              color: #1B1919 !important;
+              outline: none !important;
+              box-shadow: none !important;
+
+              &::placeholder {
+                color: #757575;
+                opacity: 1;
+              }
+
+              &:focus {
+                border: none !important;
+                outline: none !important;
+                box-shadow: none !important;
+              }
+            }
+
+            .phone-dropdown {
+              border: none !important;
+              border-radius: 8px 0 0 8px !important;
+              background: transparent !important;
+
+              .selected-flag {
+                background: transparent !important;
+                border-radius: 8px 0 0 8px !important;
+                padding-left: 10px !important;
+                width: 44px !important;
+
+                &:hover,
+                &:focus,
+                &.open {
+                  background: rgba(0, 0, 0, 0.04) !important;
+                }
+
+                .arrow {
+                  border-top-color: #555 !important;
+
+                  &.up {
+                    border-bottom-color: #555 !important;
+                  }
+                }
+              }
+
+              &.open .selected-flag {
+                background: rgba(0, 0, 0, 0.04) !important;
+              }
+            }
+
+            .country-list {
+              border: 1px solid rgba(0, 0, 0, 0.1) !important;
+              border-radius: 8px !important;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+              font-family: inherit !important;
+              font-size: 0.9rem !important;
+              color: #1b1919 !important;
+              margin-top: 6px !important;
+              background: #ffffff !important;
+
+              .country {
+                padding: 8px 12px !important;
+                transition: background-color 0.15s ease !important;
+
+                &:hover,
+                &.highlight {
+                  background-color: #f0f4ff !important;
+                  color: #1b1919 !important;
+                }
+              }
+            }
           }
 
           .submit-btn {

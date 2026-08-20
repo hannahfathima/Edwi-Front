@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import './MyAccount.scss';
 import { FiChevronRight } from 'react-icons/fi';
 import Overview from './Overview';
@@ -63,7 +63,7 @@ const MyAccount = ({ setCurrentPage }) => {
                         </nav>
                     ) : (
                         <nav className="breadcrumbs">
-                            <span onClick={() => { if (setCurrentPage) setCurrentPage('home'); }} style={{ cursor: 'pointer' }}>Home</span>
+                            <Link to="/" style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Home</Link>
                             <FiChevronRight className="breadcrumb-icon" />
                             <span className="current">My account</span>
                         </nav>
