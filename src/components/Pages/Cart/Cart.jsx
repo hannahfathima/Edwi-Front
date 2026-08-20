@@ -117,7 +117,7 @@ const Cart = () => {
             <div className="cart-content-wrapper">
                 {/* Breadcrumb */}
                 <div className="breadcrumb">
-                    <span className="bc-link">Home</span>
+                    <Link to="/" className="bc-link">Home</Link>
                     <span className="bc-separator">›</span>
                     <span className="bc-current">Cart</span>
                 </div>
