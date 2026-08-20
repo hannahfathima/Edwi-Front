@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart, updateCartQuantity, removeFromCart, calculateTotals, removeCoupon } from '../../../redux/slices/cartSlice';
 import { fetchShippingRates } from '../../../redux/slices/shippingSlice';
 import { setLoginModalOpen } from '../../../redux/slices/authSlice';
+import { addToWishlist, removeFromWishlist, fetchWishlist } from '../../../redux/slices/wishlistSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Cart.scss';
 import PaymentSummary from '../../Common/PaymentSummary/PaymentSummary';
 import { FiTrash2 } from 'react-icons/fi';
-import { BiHeart } from 'react-icons/bi';
+import { BiHeart, BiSolidHeart } from 'react-icons/bi';
 import { MdOutlineLocalOffer } from "react-icons/md";
 import CartNavbar from '../../Common/cartNavbar/CartNavbar';
 import CouponModal from './CouponModal';
@@ -48,6 +49,7 @@ const Cart = () => {
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
     const navigate = useNavigate();
     const { items: cartItems, summary, loading, appliedCoupon } = useSelector((state) => state.cart);
+    const { items: wishlistItems } = useSelector((state) => state.wishlist);
     const { rates: shippingRates } = useSelector((state) => state.shipping);
     const { token, user } = useSelector((state) => state.auth);
 
@@ -59,6 +61,7 @@ const Cart = () => {
         }
         dispatch(fetchCart());
         dispatch(fetchShippingRates());
+        dispatch(fetchWishlist());
     }, [dispatch, token, user, navigate]);
 
     useEffect(() => {
@@ -79,6 +82,29 @@ const Cart = () => {
             toast.success("Item removed from cart");
         } catch (error) {
             toast.error(error || "Failed to remove item");
+        }
+    };
+
+    const handleWishlistToggle = async (productId) => {
+        if (!token && !user) {
+            dispatch(setLoginModalOpen(true));
+            return;
+        }
+
+        const isInWishlist = wishlistItems.some(
+            (w) => w.productId?.toString() === productId?.toString() || w.productId == productId
+        );
+
+        try {
+            if (isInWishlist) {
+                await dispatch(removeFromWishlist({ productId: productId.toString() })).unwrap();
+                toast.info("Product removed from wishlist");
+            } else {
+                await dispatch(addToWishlist({ productId: productId.toString() })).unwrap();
+                toast.success("Product added to wishlist!");
+            }
+        } catch (error) {
+            toast.error(error || "Failed to update wishlist");
         }
     };
 
@@ -103,31 +129,49 @@ const Cart = () => {
                         <>
                             {/* Left Column - Cart Items */}
                             <div className="cart-items-section">
-                                {cartItems.map((item) => (
-                                    <div key={item.productId} className="cart-item-card">
-                                        <div className="item-image-container">
-                                            {/* Using a placeholder div for the image to match structure */}
-                                            <div className="image-placeholder">
-                                                <img src={getItemImage(item)} alt={item.productDetails?.name || item.productName || 'Product'} />
-                                            </div>
-                                        </div>
+                                {cartItems.map((item) => {
+                                    const isInWishlist = wishlistItems.some(
+                                        (w) => w.productId?.toString() === item.productId?.toString() || w.productId == item.productId
+                                    );
 
-                                        <div className="item-details-container">
-                                            <div className="item-title-row">
-                                                <h3 className="item-title">{item.productDetails?.name || item.title || 'Product'}</h3>
-                                                <span className="item-volume-badge">{item.productDetails?.volume || item.volume || '1 LTR'}</span>
-                                            </div>
-
-                                            <div className="item-actions-and-price">
-                                                <div className="item-actions">
-                                                    <button className="action-btn text-grey" onClick={() => handleRemoveItem(item.productId)} disabled={loading}>
-                                                        <FiTrash2 /> Remove
-                                                    </button>
-                                                    <span className="action-divider">|</span>
-                                                    <button className="action-btn text-grey">
-                                                        <BiHeart /> Add to wishlist
-                                                    </button>
+                                    return (
+                                        <div key={item.productId} className="cart-item-card">
+                                            <div className="item-image-container">
+                                                {/* Using a placeholder div for the image to match structure */}
+                                                <div className="image-placeholder">
+                                                    <img src={getItemImage(item)} alt={item.productDetails?.name || item.productName || 'Product'} />
                                                 </div>
+                                            </div>
+
+                                            <div className="item-details-container">
+                                                <div className="item-title-row">
+                                                    <h3 className="item-title">{item.productDetails?.name || item.title || 'Product'}</h3>
+                                                    <span className="item-volume-badge">{item.productDetails?.volume || item.volume || '1 LTR'}</span>
+                                                </div>
+
+                                                <div className="item-actions-and-price">
+                                                    <div className="item-actions">
+                                                        <button className="action-btn text-grey" onClick={() => handleRemoveItem(item.productId)} disabled={loading}>
+                                                            <FiTrash2 /> Remove
+                                                        </button>
+                                                        <span className="action-divider">|</span>
+                                                        <button 
+                                                            className={`action-btn text-grey ${isInWishlist ? 'in-wishlist' : ''}`}
+                                                            onClick={() => handleWishlistToggle(item.productId)}
+                                                            disabled={loading}
+                                                            title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                                                        >
+                                                            {isInWishlist ? (
+                                                                <>
+                                                                    <BiSolidHeart style={{ color: '#E3762D' }} /> Wishlisted
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <BiHeart /> Add to wishlist
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    </div>
 
                                                 <div className="item-controls-price">
                                                     <div className="quantity-selector">
@@ -162,7 +206,8 @@ const Cart = () => {
                                             </div>
                                         </div>
                                     </div>
-                                ))}
+                                );
+                            })}
                             </div>
 
                             {/* Right Column - Payment Summary & Coupons */}

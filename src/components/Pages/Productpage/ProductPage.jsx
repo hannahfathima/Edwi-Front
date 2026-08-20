@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { addToCart, setBuyNowItem, resetCheckoutMode } from '../../../redux/slices/cartSlice'
 import { fetchProducts } from '../../../redux/slices/dataSlice'
+import { addToWishlist, removeFromWishlist, fetchWishlist } from '../../../redux/slices/wishlistSlice'
 import { setLoginModalOpen } from '../../../redux/slices/authSlice'
 import { toast } from 'react-toastify';
 import './ProductPage.scss'
 import Navbar from '../../Navbar/Navbar'
 import { BsBoxSeam, BsHeadset, BsPlus } from 'react-icons/bs'
+import { FaHeart, FaRegHeart } from 'react-icons/fa6'
 import OurPromise from '../../OurPromise/OurPromise'
 /* =====================================================
    🔥 STATIC PRODUCT DATA OBJECT
@@ -58,13 +60,17 @@ const ProductPage = () => {
     const navigate = useNavigate();
     const { items: cartItems, loading } = useSelector((state) => state.cart);
     const { products, status: productStatus } = useSelector((state) => state.data);
+    const { items: wishlistItems } = useSelector((state) => state.wishlist);
     const { token, user } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (productStatus === 'idle') {
             dispatch(fetchProducts());
         }
-    }, [productStatus, dispatch]);
+        if (token || user) {
+            dispatch(fetchWishlist());
+        }
+    }, [productStatus, dispatch, token, user]);
 
     const product = products?.find(p => p.id === id || p.id === parseInt(id));
 
@@ -97,6 +103,26 @@ const ProductPage = () => {
 
     // Check if the current product is already in the cart
     const isProductInCart = cartItems.some(item => item.productId === productData.id.toString() || item.productId === productData.id);
+    const isInWishlist = wishlistItems.some(item => item.productId?.toString() === productData.id?.toString() || item.productId == productData.id);
+
+    const handleWishlistToggle = async () => {
+        if (!token && !user) {
+            dispatch(setLoginModalOpen(true));
+            return;
+        }
+
+        try {
+            if (isInWishlist) {
+                await dispatch(removeFromWishlist({ productId: productData.id.toString() })).unwrap();
+                toast.info("Product removed from wishlist");
+            } else {
+                await dispatch(addToWishlist({ productId: productData.id.toString() })).unwrap();
+                toast.success("Product added to wishlist!");
+            }
+        } catch (error) {
+            toast.error(error || "Failed to update wishlist");
+        }
+    };
 
     const handleCartAction = async () => {
         if (!token && !user) {
@@ -153,7 +179,15 @@ const ProductPage = () => {
                 <div className="product-page-sub row">
 
                     {/* Product Image */}
-                    <div className="col-lg-6 col-md-6 col-sm-12 product-page-card">
+                    <div className="col-lg-6 col-md-6 col-sm-12 product-page-card" style={{ position: 'relative' }}>
+                        <div 
+                            className="wishlist-icon-container" 
+                            onClick={handleWishlistToggle}
+                            style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', cursor: 'pointer', zIndex: 5, padding: '0.5rem', backgroundColor: '#fff', borderRadius: '50%', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                        >
+                            {isInWishlist ? <FaHeart style={{ color: '#E3762D', fontSize: '22px' }} /> : <FaRegHeart style={{ color: '#999', fontSize: '22px' }} />}
+                        </div>
                         <img src={productData.imageUrl} alt={productData.name} />
                     </div>
 
