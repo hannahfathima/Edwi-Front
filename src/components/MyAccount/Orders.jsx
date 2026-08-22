@@ -232,7 +232,7 @@ const Orders = ({ setActiveTab, setCancelOrderId, selectedOrderId, setSelectedOr
                             <div className="card-bottom-actions">
                                 <button
                                     className="btn-outline"
-                                    onClick={() => setActiveTab && setActiveTab('/contact-us')}
+                                    onClick={() => navigate('/contact-us')}
                                 >
                                     Support
                                 </button>
