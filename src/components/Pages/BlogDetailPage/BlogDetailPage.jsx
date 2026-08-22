@@ -87,6 +87,15 @@ const BlogDetailsPage = () => {
     return (
         <div className="BlogDetailsPageMainWrapper">
             <Navbar />
+            <div className="container-fluid pt-3 pb-2" style={{ maxWidth: '1440px', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+                <div className="breadcrumb" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#666' }}>
+                    <Link to="/" style={{ color: '#555', textDecoration: 'none' }}>Home</Link>
+                    <span>›</span>
+                    <Link to="/blogs" style={{ color: '#555', textDecoration: 'none' }}>Blogs</Link>
+                    <span>›</span>
+                    <span style={{ color: '#13368E', fontWeight: 600 }}>{blog.title}</span>
+                </div>
+            </div>
 
             <div className="blog-details-content">
                 <h1 className="blog-detail-heading">{blog.title}</h1>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Gallery.scss';
 import { FaPlay } from 'react-icons/fa';
 import Navbar from '../../Navbar/Navbar';
@@ -26,6 +27,13 @@ const Gallery = () => {
     return (
         <>
             <Navbar />
+            <div className="container-fluid pt-3 pb-1" style={{ maxWidth: '1440px', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+                <div className="breadcrumb" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#666' }}>
+                    <Link to="/" style={{ color: '#555', textDecoration: 'none' }}>Home</Link>
+                    <span>›</span>
+                    <span style={{ color: '#13368E', fontWeight: 600 }}>Gallery</span>
+                </div>
+            </div>
             <div className="gallery-section">
                 <div className="gallery-header">
                     <h3>Gallery</h3>

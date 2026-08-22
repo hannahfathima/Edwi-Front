@@ -27,6 +27,13 @@ const Aboutus = () => {
     return (
         <div className="about-us-page">
             <Navbar />
+            <div className="container-fluid pt-3 pb-1" style={{ maxWidth: '1440px', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+                <div className="breadcrumb" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#666' }}>
+                    <Link to="/" style={{ color: '#555', textDecoration: 'none' }}>Home</Link>
+                    <span>›</span>
+                    <span style={{ color: '#13368E', fontWeight: 600 }}>About Us</span>
+                </div>
+            </div>
 
             {/* 1. Hero Section */}
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { addToCart, setBuyNowItem, resetCheckoutMode } from '../../../redux/slices/cartSlice'
 import { fetchProducts } from '../../../redux/slices/dataSlice'
 import { addToWishlist, removeFromWishlist, fetchWishlist } from '../../../redux/slices/wishlistSlice'
@@ -173,7 +173,15 @@ const ProductPage = () => {
     return (
         <div className="Product-page-wrapper">
             <Navbar />
-            {/* <ScrollToTopOnMount /> */}
+            <div className="container-fluid pt-3 pb-2" style={{ maxWidth: '1440px', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+                <div className="breadcrumb" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#666' }}>
+                    <Link to="/" style={{ color: '#555', textDecoration: 'none' }}>Home</Link>
+                    <span>›</span>
+                    <Link to="/our-products" style={{ color: '#555', textDecoration: 'none' }}>Products</Link>
+                    <span>›</span>
+                    <span style={{ color: '#13368E', fontWeight: 600 }}>{productData.name}</span>
+                </div>
+            </div>
 
             <div className="container-fluid">
                 <div className="product-page-sub row">

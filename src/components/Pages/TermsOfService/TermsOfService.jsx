@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../../Navbar/Navbar';
 import './TermsOfService.scss';
 import { CiMail, CiLocationOn } from 'react-icons/ci';
@@ -66,6 +67,13 @@ const TermsOfService = () => {
   return (
     <div className="terms-of-service-page">
       <Navbar />
+      <div className="container-fluid pt-3 pb-1" style={{ maxWidth: '1440px', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+        <div className="breadcrumb" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#666' }}>
+          <Link to="/" style={{ color: '#555', textDecoration: 'none' }}>Home</Link>
+          <FiChevronRight style={{ fontSize: '12px' }} />
+          <span style={{ color: '#13368E', fontWeight: 600 }}>Terms of Service</span>
+        </div>
+      </div>
       
       {/* Hero Header */}
       <section className="policy-hero">

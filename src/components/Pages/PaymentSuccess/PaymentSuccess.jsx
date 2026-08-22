@@ -76,6 +76,9 @@ const PaymentSuccess = () => {
                 </div>
 
                 <div className="action-buttons">
+                    <button className="btn-outline" onClick={() => navigate('/')}>
+                        Go to Home
+                    </button>
                     <button className="btn-outline" onClick={() => navigate('/my-account')}>
                         My Orders
                     </button>

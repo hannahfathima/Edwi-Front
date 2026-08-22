@@ -10,7 +10,9 @@ const Footer = () => {
                 <div className="footer__top">
                     {/* Left Section: Logo */}
                     <div className="footer__logo-container">
-                        <img src="/Images/Footer-logo.svg" alt="Edhwi Logo" className="footer__logo-img" />
+                        <Link to="/">
+                            <img src="/Images/Footer-logo.svg" alt="Edhwi Logo" className="footer__logo-img" style={{ cursor: 'pointer' }} />
+                        </Link>
                     </div>
 
                     {/* Right Section: Links Columns */}
@@ -38,10 +40,10 @@ const Footer = () => {
                             <h3 className="footer__column-title">Shop</h3>
                             <ul className="footer__list">
                                 <li><Link to="/our-products">Our Products</Link></li>
-                                <li><a href="#about">About</a></li>
+                                <li><Link to="/about-us">About</Link></li>
                                 <li><Link to="/gallery">Gallery</Link></li>
                                 <li><Link to="/blogs">Blogs</Link></li>
-                                <li><a href="#faq">FAQ</a></li>
+                                <li><Link to="/contact-us">Contact Us</Link></li>
                             </ul>
                         </div>
 

@@ -57,6 +57,8 @@ const MyAccount = ({ setCurrentPage }) => {
                 <div className="my-account-container">
                     {activeTab === 'cancel-order' ? (
                         <nav className="breadcrumbs">
+                            <Link to="/" style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Home</Link>
+                            <FiChevronRight className="breadcrumb-icon" />
                             <span onClick={() => setActiveTab('overview')} style={{ cursor: 'pointer' }}>My account</span>
                             <FiChevronRight className="breadcrumb-icon" />
                             <span className="current">Cancel order</span>
