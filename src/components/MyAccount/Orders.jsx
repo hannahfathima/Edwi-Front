@@ -137,7 +137,7 @@ const Orders = ({ setActiveTab, setCancelOrderId, selectedOrderId, setSelectedOr
                             {/* Line items for this order */}
                             {(order.pricing?.items || order.items || []).map((item, index) => (
                                 <React.Fragment key={`${item.productId}-${index}`}>
-                                    <hr className="card-divider" />
+                                    <div className="card-divider"></div>
                                     <div className="card-item">
                                         <div className="item-image-box">
                                             {item.image ? (
@@ -181,7 +181,7 @@ const Orders = ({ setActiveTab, setCancelOrderId, selectedOrderId, setSelectedOr
                                 </React.Fragment>
                             ))}
 
-                            <hr className="card-divider" />
+                            <div className="card-divider"></div>
 
                             <div className="card-summary">
 
