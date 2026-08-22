@@ -14,58 +14,60 @@
 
 
     /* =====================================================
-   🔥 LIGHT MODE (When route is not Home)
+   🔥 LIGHT MODE (When route is not Home - Desktop)
 ===================================================== */
 
-    &.navbar-light-mode {
-        background: #ffffff !important;
-        color: #000;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    @media (min-width: 992px) {
+        &.navbar-light-mode {
+            background: #ffffff !important;
+            color: #000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
-        /* 🔹 Navigation Links */
-        .navbar__nav-item {
-            a {
-                color: #000 !important;
-                text-shadow: none;
-                font-weight: 500;
+            /* 🔹 Navigation Links */
+            .navbar__nav-item {
+                a {
+                    color: #000;
+                    text-shadow: none;
+                    font-weight: 500;
 
-                &.active {
-                    color: #13368E !important;
-                    font-weight: 700 !important;
+                    &.active {
+                        color: #13368E !important;
+                        font-weight: 700 !important;
 
-                    &::after {
-                        background-color: #13368E;
+                        &::after {
+                            background-color: #13368E;
+                        }
                     }
                 }
             }
-        }
 
-        /* 🔹 Action Icons */
-        .navbar__action-icon {
-            span {
-                color: #000;
-                text-shadow: none;
-            }
-
-            svg {
-                color: #000;
-                filter: none;
-            }
-
-            &.active {
+            /* 🔹 Action Icons */
+            .navbar__action-icon {
                 span {
-                    color: #13368E !important;
-                    font-weight: 700;
+                    color: #000;
+                    text-shadow: none;
                 }
+
                 svg {
-                    color: #13368E !important;
+                    color: #000;
+                    filter: none;
+                }
+
+                &.active {
+                    span {
+                        color: #13368E !important;
+                        font-weight: 700;
+                    }
+                    svg {
+                        color: #13368E !important;
+                    }
                 }
             }
-        }
 
-        /* 🔹 Divider Line */
-        .navbar__divider {
-            background-color: #ddd;
+            /* 🔹 Divider Line */
+            .navbar__divider {
+                background-color: #ddd;
+            }
         }
     }
 
@@ -247,6 +249,28 @@ body.menu-open {
         background: #155eef !important;
     }
 
+    .mobile-menu-close-btn {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        z-index: 1100;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover, &:active {
+            background: rgba(255, 255, 255, 0.35);
+            transform: scale(1.05);
+        }
+    }
+
     .custom-mobile-menu {
         position: fixed !important;
         top: 0;
@@ -279,8 +303,9 @@ body.menu-open {
         }
 
         .nav-link,
-        .mobile-nav-text {
-            color: #fff !important;
+        .mobile-nav-text,
+        .navbar__nav-item a {
+            color: #ffffff !important;
             font-size: 16px;
             font-weight: 500;
             text-align: center;
@@ -288,6 +313,12 @@ body.menu-open {
             margin: 0;
             padding: 8px 0;
             text-shadow: none !important;
+            text-decoration: none !important;
+
+            &.active {
+                color: #ffc107 !important;
+                font-weight: 700 !important;
+            }
         }
 
         .navbar__nav-items {
@@ -307,8 +338,26 @@ body.menu-open {
                 flex-direction: row;
                 justify-content: center;
                 gap: 10px;
-                color: #fff !important;
+                color: #ffffff !important;
                 margin-bottom: 0px;
+
+                span, .mobile-nav-text {
+                    color: #ffffff !important;
+                }
+
+                svg {
+                    color: #ffffff !important;
+                }
+
+                &.active {
+                    span, .mobile-nav-text {
+                        color: #ffc107 !important;
+                        font-weight: 700 !important;
+                    }
+                    svg {
+                        color: #ffc107 !important;
+                    }
+                }
             }
 
             .navbar__cart-wrapper {
@@ -318,7 +367,7 @@ body.menu-open {
             .navbar__login-btn {
                 background: transparent;
                 border: 1px solid rgba(255, 255, 255, 0.7);
-                color: #fff !important;
+                color: #ffffff !important;
                 border-radius: 8px;
                 padding: 10px 0;
                 font-size: 15px;
@@ -330,7 +379,7 @@ body.menu-open {
                 text-shadow: none;
 
                 &:hover {
-                    background: #fff;
+                    background: #ffffff;
                     color: #155eef !important;
                 }
             }

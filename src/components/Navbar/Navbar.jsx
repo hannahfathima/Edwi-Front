@@ -1,6 +1,6 @@
 import React from 'react';
 import './Navbar.scss';
-import { FiHeart, FiShoppingBag, FiUser, FiMenu } from 'react-icons/fi';
+import { FiHeart, FiShoppingBag, FiUser, FiMenu, FiX } from 'react-icons/fi';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, setLoginModalOpen } from '../../redux/slices/authSlice';
@@ -83,14 +83,6 @@ const Navbar = ({ setCurrentPage }) => {
     const isCartActive = location.pathname === '/cart';
     const isAccountActive = location.pathname === '/my-account' && location.state?.activeTab !== 'wishlist';
 
-    const getLinkStyle = (path) => {
-        const active = isActive(path);
-        if (active) {
-            return { color: isHome ? "#ffc107" : "#13368E", fontWeight: 700 };
-        }
-        return { color: isHome ? "#fff" : "#000" };
-    };
-
     return (
         <nav className={`navbar navbar-expand-lg ${isHome ? 'navbar-dark-mode' : 'navbar-light-mode'}`}>
             <div className="container-fluid px-0" style={{ maxWidth: '1440px', margin: '0 auto' }}>
@@ -126,13 +118,15 @@ const Navbar = ({ setCurrentPage }) => {
                             <path opacity="0.5" d="M0 20H1440V80C1440 80 1140 0 720 50C300 100 0 80 0 80V20Z" fill="#184BC6" />
                         </svg>
                         <button
-                            className="btn-close btn-close-white position-absolute"
-                            style={{ top: '20px', right: '20px', zIndex: 10, filter: 'invert(1) grayscale(100%) brightness(200%)' }}
+                            className="mobile-menu-close-btn"
                             type="button"
                             onClick={handleMenuClose}
                             data-bs-toggle="collapse"
                             data-bs-target="#navbarSupportedContent"
-                        ></button>
+                            aria-label="Close menu"
+                        >
+                            <FiX size={26} color="#ffffff" />
+                        </button>
                     </div>
 
                     {/* Mobile Only Logo */}
@@ -143,26 +137,25 @@ const Navbar = ({ setCurrentPage }) => {
                     {/* Center Menu */}
                     <ul className="navbar-nav mx-auto mb-2 mb-lg-0 navbar__nav-items align-items-center align-items-lg-center" style={{ zIndex: 10 }}>
                         <li className="nav-item navbar__nav-item">
-                            <Link className={`nav-link ${isActive('/') ? 'active' : ''}`} to="/" style={getLinkStyle('/')} onClick={handleNavClick}>Home</Link>
+                            <Link className={`nav-link ${isActive('/') ? 'active' : ''}`} to="/" onClick={handleNavClick}>Home</Link>
                         </li>
 
                         <li className="nav-item navbar__nav-item">
-                            <Link className={`nav-link ${isActive('/contact-us') ? 'active' : ''}`} to="/contact-us" style={getLinkStyle('/contact-us')} onClick={handleNavClick}>Contact Us</Link>
+                            <Link className={`nav-link ${isActive('/contact-us') ? 'active' : ''}`} to="/contact-us" onClick={handleNavClick}>Contact Us</Link>
                         </li>
 
                         <li className="nav-item navbar__nav-item">
-                            <Link className={`nav-link ${isActive('/our-products') ? 'active' : ''}`} to="/our-products" style={getLinkStyle('/our-products')} onClick={handleNavClick}>Our Products</Link>
+                            <Link className={`nav-link ${isActive('/our-products') ? 'active' : ''}`} to="/our-products" onClick={handleNavClick}>Our Products</Link>
                         </li>
 
                         <li className="nav-item navbar__nav-item">
-                            <Link className={`nav-link ${isActive('/gallery') ? 'active' : ''}`} to="/gallery" style={getLinkStyle('/gallery')} onClick={handleNavClick}>Gallery</Link>
+                            <Link className={`nav-link ${isActive('/gallery') ? 'active' : ''}`} to="/gallery" onClick={handleNavClick}>Gallery</Link>
                         </li>
 
                         <li className="nav-item navbar__nav-item">
                             <Link
                                 className={`nav-link ${isActive('/about-us') ? 'active' : ''}`}
                                 to="/about-us"
-                                style={getLinkStyle('/about-us')}
                                 onClick={handleNavClick}
                             >
                                 About Us
@@ -179,7 +172,6 @@ const Navbar = ({ setCurrentPage }) => {
                             to={token || user ? "/my-account" : "#"}
                             state={{ activeTab: 'wishlist' }}
                             className={`navbar__action-icon ${isWishlistActive ? 'active' : ''}`}
-                            style={{ textDecoration: "none", color: isWishlistActive ? (isHome ? '#ffc107' : '#13368e') : (isHome ? "#fff" : "#000") }}
                             onClick={(e) => {
                                 if (!token && !user) {
                                     e.preventDefault();
@@ -191,21 +183,14 @@ const Navbar = ({ setCurrentPage }) => {
                         >
                             <FiHeart
                                 size={22}
-                                color={isWishlistActive ? (isHome ? '#ffc107' : '#13368e') : (isHome ? "#fff" : "#000")}
-                                fill={isWishlistActive ? (isHome ? '#ffc107' : '#13368e') : 'none'}
                                 className="d-none d-lg-block px-0"
                             />
-                            <span
-                                className="mobile-nav-text"
-                            >
-                                Wishlist
-                            </span>
+                            <span className="mobile-nav-text">Wishlist</span>
                         </Link>
 
                         <Link
                             to={token || user ? "/cart" : "#"}
                             className={`navbar__action-icon navbar__cart-wrapper ${isCartActive ? 'active' : ''}`}
-                            style={{ textDecoration: "none", color: isCartActive ? (isHome ? '#ffc107' : '#13368e') : (isHome ? "#fff" : "#000") }}
                             onClick={(e) => {
                                 if (!token && !user) {
                                     e.preventDefault();
@@ -216,7 +201,7 @@ const Navbar = ({ setCurrentPage }) => {
                             }}
                         >
                             <div className="position-relative d-none d-lg-flex align-items-center justify-content-center">
-                                <FiShoppingBag size={22} color={isCartActive ? (isHome ? '#ffc107' : '#13368e') : (isHome ? "#fff" : "#000")} />
+                                <FiShoppingBag size={22} />
                                 <span className="navbar__cart-badge">{cartItems?.length || 0}</span>
                             </div>
                             <span className="mobile-nav-text">Cart</span>
@@ -225,7 +210,6 @@ const Navbar = ({ setCurrentPage }) => {
                         <Link
                             to={token || user ? "/my-account" : "#"}
                             className={`navbar__action-icon ${isAccountActive ? 'active' : ''}`}
-                            style={{ textDecoration: "none", color: isAccountActive ? (isHome ? '#ffc107' : '#13368e') : (isHome ? "#fff" : "#000") }}
                             onClick={(e) => {
                                 if (!token && !user) {
                                     e.preventDefault();
@@ -235,7 +219,7 @@ const Navbar = ({ setCurrentPage }) => {
                                 }
                             }}
                         >
-                            <FiUser size={22} color={isAccountActive ? (isHome ? '#ffc107' : '#13368e') : (isHome ? "#fff" : "#000")} className="d-none d-lg-block" />
+                            <FiUser size={22} className="d-none d-lg-block" />
                             <span className="mobile-nav-text">Account</span>
                         </Link>
 
