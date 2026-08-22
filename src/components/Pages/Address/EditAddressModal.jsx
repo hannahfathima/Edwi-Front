@@ -180,8 +180,8 @@ const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInlin
                                 country={'in'}
                                 value={formData.phone}
                                 onChange={phone => setFormData(prev => ({ ...prev, phone }))}
-                                inputStyle={{ width: '100%', height: '42px', fontSize: '15px' }}
-                                containerStyle={{ marginTop: '5px' }}
+                                inputStyle={{ width: '100%', height: '44px', fontSize: '14px', borderRadius: '8px' }}
+                                containerStyle={{ width: '100%', margin: 0 }}
                                 enableSearch={true}
                                 disableSearchIcon={true}
                             />
