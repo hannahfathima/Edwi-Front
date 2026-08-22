@@ -251,7 +251,7 @@ const Cart = () => {
                                     applicableGst={summary.gst}
                                     delivery={summary.delivery}
                                     total={summary.total}
-                                    buttonText="Continue"
+                                    buttonText="Proceed to checkout"
                                     onButtonClick={() => navigate('/address')}
                                     showButton={true} className="desktop-payment-summary"
                                     disabled={cartItems.length === 0}

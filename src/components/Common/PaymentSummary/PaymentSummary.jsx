@@ -12,7 +12,8 @@ const PaymentSummary = ({
     buttonText = 'Continue',
     onButtonClick,
     showButton = true,
-    className = ''
+    className = '',
+    disabled = false
 }) => {
     const totalSavings = (discountOnMrp || 0) + (couponSavings || 0);
 
@@ -67,7 +68,7 @@ const PaymentSummary = ({
             </div>
 
             {showButton && (
-                <button className="summary-action-button" onClick={onButtonClick}>
+                <button className="summary-action-button" onClick={onButtonClick} disabled={disabled}>
                     {buttonText}
                 </button>
             )}
