@@ -275,25 +275,17 @@ const ProductPage = () => {
                 </div>
 
                 {/* Additional Images */}
-                <div className="row image-whole-section">
-                    {productData.images.map((image, index) => (
-                        <div key={index} className="col-lg-6 col-md-6 col-sm-6 col-6">
-                            <div className='card-image-section'>
-                                <img src={image.url} alt={`Product ${index + 1}`} />
+                {productData.images && productData.images.length > 0 && (
+                    <div className="row image-whole-section">
+                        {productData.images.map((image, index) => (
+                            <div key={index} className="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div className='card-image-section'>
+                                    <img src={image.url || image} alt={`Product image ${index + 1}`} />
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="row image-whole-section">
-                    {productData.images.map((image, index) => (
-                        <div key={index} className="col-lg-6 col-md-6 col-sm-6 col-6">
-                            <div className='card-image-section'>
-                                <img src={image.url} alt={`Product ${index + 1}`} />
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
 
                 <div>
                     <OurPromise />
