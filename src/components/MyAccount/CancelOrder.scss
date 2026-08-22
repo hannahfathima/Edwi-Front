@@ -78,6 +78,24 @@ $warning-text: #ca8a04;
         }
     }
 
+    .validation-error-banner {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: $danger-bg;
+        color: $danger-text;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+
+        .error-icon {
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+    }
+
     .order-summary-section {
         display: flex;
         flex-direction: column;
@@ -229,6 +247,22 @@ $warning-text: #ca8a04;
             color: $text-dark;
         }
 
+        .privacy-statement-text {
+            font-size: 0.8125rem;
+            color: $text-gray;
+            margin: 0;
+            line-height: 1.4;
+
+            a {
+                color: $primary-color;
+                text-decoration: underline;
+
+                &:hover {
+                    color: darken($primary-color, 10%);
+                }
+            }
+        }
+
         .checkbox-container {
             display: flex;
             align-items: flex-start;
@@ -247,6 +281,15 @@ $warning-text: #ca8a04;
             .checkbox-label {
                 font-size: 0.875rem;
                 color: $text-gray;
+
+                a {
+                    color: $primary-color;
+                    text-decoration: underline;
+
+                    &:hover {
+                        color: darken($primary-color, 10%);
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { FiAlertCircle } from 'react-icons/fi';
 import { cancelOrder, fetchMyOrders } from '../../redux/slices/orderSlice';
 import './CancelOrder.scss';
@@ -13,6 +14,7 @@ const CancelOrder = ({ setActiveTab, cancelOrderId, setCancelOrderId }) => {
     const [feedback, setFeedback] = useState('');
     const [acceptedPolicy, setAcceptedPolicy] = useState(false);
     const [isCanceling, setIsCanceling] = useState(false);
+    const [validationError, setValidationError] = useState('');
 
     const order = orders.find(o => (o.id === cancelOrderId || o.orderId === cancelOrderId));
 
@@ -51,19 +53,21 @@ const CancelOrder = ({ setActiveTab, cancelOrderId, setCancelOrderId }) => {
         const text = e.target.options[e.target.selectedIndex].text;
         setReason(val);
         setCategoryName(text);
+        if (validationError) setValidationError('');
     };
 
     const handleConfirmCancellation = async () => {
         if (!reason || !categoryName) {
-            alert('Please select a reason for cancellation.');
+            setValidationError('Please select a reason for cancellation.');
             return;
         }
 
         if (!acceptedPolicy) {
-            alert('Please accept the privacy policy to continue.');
+            setValidationError('Please accept the Privacy & Cancellation Policy to continue.');
             return;
         }
 
+        setValidationError('');
         setIsCanceling(true);
         try {
             const resultAction = await dispatch(cancelOrder({
@@ -79,10 +83,10 @@ const CancelOrder = ({ setActiveTab, cancelOrderId, setCancelOrderId }) => {
                 if(setCancelOrderId) setCancelOrderId(null);
                 if(setActiveTab) setActiveTab('orders');
             } else {
-                alert(`Cancellation failed: ${resultAction.payload}`);
+                setValidationError(`Cancellation failed: ${resultAction.payload || 'Failed to cancel order.'}`);
             }
         } catch (err) {
-            alert('An unexpected error occurred.');
+            setValidationError('An unexpected error occurred.');
         } finally {
             setIsCanceling(false);
         }
@@ -101,7 +105,7 @@ const CancelOrder = ({ setActiveTab, cancelOrderId, setCancelOrderId }) => {
 
                 <div className="warning-banner">
                     <FiAlertCircle className="warning-icon" />
-                    <span>You are about to cancel order <strong>#{order.orderNumber || order.orderId || order.id}</strong>. This action cannot be undone.</span>
+                    <span>Attention: You are requesting cancellation for order <strong>#{order.orderNumber || order.orderId || order.id}</strong>. Order cancellation is permanent and cannot be undone.</span>
                 </div>
 
                 <div className="order-summary-section">
@@ -154,23 +158,38 @@ const CancelOrder = ({ setActiveTab, cancelOrderId, setCancelOrderId }) => {
                 </div>
 
                 <div className="privacy-policy">
-                    <h4>Privacy policy</h4>
+                    <h4>Privacy & Cancellation Policy</h4>
+                    <p className="privacy-statement-text">
+                        By cancelling this order, your personal data associated with this transaction will be processed in accordance with our <Link to="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link>.
+                    </p>
                     <label className="checkbox-container">
                         <input 
                             type="checkbox" 
                             checked={acceptedPolicy}
-                            onChange={(e) => setAcceptedPolicy(e.target.checked)}
+                            onChange={(e) => {
+                                setAcceptedPolicy(e.target.checked);
+                                if (validationError) setValidationError('');
+                            }}
                         />
                         <span className="checkmark"></span>
-                        <span className="checkbox-label">I understand this action can not be undone</span>
+                        <span className="checkbox-label">
+                            I have read and agree to the <Link to="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link> and understand that this action cannot be undone.
+                        </span>
                     </label>
                 </div>
+
+                {validationError && (
+                    <div className="validation-error-banner">
+                        <FiAlertCircle className="error-icon" />
+                        <span>{validationError}</span>
+                    </div>
+                )}
 
                 <div className="action-buttons">
                     <button 
                         className="btn-confirm" 
                         onClick={handleConfirmCancellation}
-                        disabled={isCanceling || !acceptedPolicy}
+                        disabled={isCanceling}
                     >
                         {isCanceling ? 'Cancelling...' : 'Confirm cancellation'}
                     </button>
