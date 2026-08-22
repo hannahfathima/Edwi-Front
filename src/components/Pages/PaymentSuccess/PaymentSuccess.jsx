@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearCart } from '../../../redux/slices/cartSlice';
 import { MdDone } from 'react-icons/md';
 import confetti from 'canvas-confetti';
 import './PaymentSuccess.scss';
 
 const PaymentSuccess = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const { currentOrder } = useSelector((state) => state.order);
 
@@ -15,6 +17,8 @@ const PaymentSuccess = () => {
     const paymentMethod = currentOrder?.paymentMethod || currentOrder?.order?.paymentMethod;
 
     useEffect(() => {
+        dispatch(clearCart());
+
         // Trigger confetti (cracker popper) effect
         const duration = 3 * 1000;
         const animationEnd = Date.now() + duration;

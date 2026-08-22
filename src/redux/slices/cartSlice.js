@@ -70,6 +70,24 @@ export const removeFromCart = createAsyncThunk(
     }
 );
 
+export const clearCart = createAsyncThunk(
+    'cart/clearCart',
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = getToken();
+            if (token) {
+                const config = { headers: { Authorization: `Bearer ${token}` } };
+                const response = await axios.post(`${BaseUrl}/clear-cart`, {}, config);
+                return response.data;
+            }
+            return { success: true };
+        } catch (error) {
+            console.error('Clear cart thunk error:', error);
+            return { success: true };
+        }
+    }
+);
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
@@ -180,9 +198,11 @@ const cartSlice = createSlice({
                 subtotal: result.totalMrp
             };
         },
-        clearCart: (state) => {
+        clearCartLocal: (state) => {
             state.items = [];
             state.appliedCoupon = null;
+            state.checkoutItem = null;
+            state.isBuyNow = false;
             state.summary = {
                 totalMrp: 0,
                 discount: 0,
@@ -212,9 +232,31 @@ const cartSlice = createSlice({
 
             .addCase(removeFromCart.pending, (state) => { state.loading = true; })
             .addCase(removeFromCart.fulfilled, (state) => { state.loading = false; })
-            .addCase(removeFromCart.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
+            .addCase(removeFromCart.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+
+            .addCase(clearCart.pending, (state) => {
+                state.items = [];
+                state.appliedCoupon = null;
+                state.checkoutItem = null;
+                state.isBuyNow = false;
+                state.summary = { totalMrp: 0, discount: 0, couponSavings: 0, gst: 0, delivery: 0, total: 0 };
+            })
+            .addCase(clearCart.fulfilled, (state) => {
+                state.items = [];
+                state.appliedCoupon = null;
+                state.checkoutItem = null;
+                state.isBuyNow = false;
+                state.summary = { totalMrp: 0, discount: 0, couponSavings: 0, gst: 0, delivery: 0, total: 0 };
+            })
+            .addCase(clearCart.rejected, (state) => {
+                state.items = [];
+                state.appliedCoupon = null;
+                state.checkoutItem = null;
+                state.isBuyNow = false;
+                state.summary = { totalMrp: 0, discount: 0, couponSavings: 0, gst: 0, delivery: 0, total: 0 };
+            });
     }
 });
 
-export const { calculateTotals, clearCart, applyCoupon, removeCoupon, setBuyNowItem, resetCheckoutMode } = cartSlice.actions;
+export const { calculateTotals, clearCartLocal, applyCoupon, removeCoupon, setBuyNowItem, resetCheckoutMode } = cartSlice.actions;
 export default cartSlice.reducer;
