@@ -43,7 +43,9 @@ const PaymentSummary = ({
 
                     <div className="summary-row">
                         <span className="row-label">Applicable GST</span>
-                        <span className="row-value">₹{applicableGst.toFixed(2)}</span>
+                        <span className="row-value" style={{ color: '#666', fontWeight: '400', fontSize: '0.9rem' }}>
+                            Included (₹{(applicableGst || 0).toFixed(2)})
+                        </span>
                     </div>
 
                     <div className="summary-row">

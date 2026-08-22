@@ -116,8 +116,15 @@ const cartSlice = createSlice({
             // Get delivery charge
             let delivery = 0;
             const subtotalForShipping = itemsToCalculate.reduce((sum, item) => {
-                const details = item.productDetails || item;
-                const price = details.sellingPrice || details.price || 0;
+                const price = parseFloat(
+                    item.variantCombination?.sellingPrice ||
+                    item.variantCombination?.price ||
+                    item.productDetails?.sellingPrice || 
+                    item.sellingPrice || 
+                    item.productDetails?.price || 
+                    item.price || 
+                    0
+                );
                 return sum + (price * (item.quantity || 1));
             }, 0);
 
@@ -170,7 +177,7 @@ const cartSlice = createSlice({
                 gst: result.gstAmount,
                 delivery: result.delivery,
                 total: result.total,
-                subtotal: result.basePrice // Optional: adding subtotal for UI consistency
+                subtotal: result.totalMrp
             };
         },
         clearCart: (state) => {

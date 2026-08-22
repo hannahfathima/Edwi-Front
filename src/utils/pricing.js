@@ -8,6 +8,8 @@ export const calculateItemPricing = (item, discountShare = 0) => {
     // Priority check for price in Edhwi structure
     // sellingPrice is the discounted price, price is the base/MRP price if sellingPrice exists
     const sellingPrice = parseFloat(
+        item.variantCombination?.sellingPrice ||
+        item.variantCombination?.price ||
         item.productDetails?.sellingPrice || 
         item.sellingPrice || 
         item.productDetails?.price || 
@@ -17,6 +19,8 @@ export const calculateItemPricing = (item, discountShare = 0) => {
 
     // Get Original Price (MRP including GST)
     const mrpUnitPrice = parseFloat(
+        item.variantCombination?.mrp ||
+        item.variantCombination?.price ||
         item.productDetails?.mrp || 
         item.mrp || 
         (item.sellingPrice ? item.price : 0) || // If sellingPrice is present, price field is likely MRP
@@ -86,6 +90,8 @@ export const calculateCartTotals = (cartItems, totalDiscount = 0, deliveryCharge
         const gstRate = parseFloat(rawGst) / 100;
         
         const price = parseFloat(
+            item.variantCombination?.sellingPrice ||
+            item.variantCombination?.price ||
             item.productDetails?.sellingPrice || 
             item.sellingPrice || 
             item.productDetails?.price || 
