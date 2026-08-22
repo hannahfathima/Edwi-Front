@@ -11,7 +11,7 @@ const MySettings = () => {
     const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -30,7 +30,7 @@ const MySettings = () => {
                 <div className="info-card">
                     <div className="card-header">
                         <span className="user-name">{user?.name || 'Customer'}</span>
-                        <button className="edit-btn">Edit</button>
+                        {/* <button className="edit-btn">Edit</button> */}
                     </div>
                     <div className="card-body">
                         {user?.email && <p>{user.email}</p>}
@@ -61,13 +61,13 @@ const MySettings = () => {
                 </div>
             </div>
 
-            <LogoutModal 
-                isOpen={isLogoutModalOpen} 
-                onClose={() => setIsLogoutModalOpen(false)} 
+            <LogoutModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
             />
-            <DeleteAccountModal 
-                isOpen={isDeleteModalOpen} 
-                onClose={() => setIsDeleteModalOpen(false)} 
+            <DeleteAccountModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
             />
         </section>
     );

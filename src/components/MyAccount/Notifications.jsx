@@ -4,7 +4,7 @@ import { fetchNotifications, markAsRead } from '../../redux/slices/notifications
 import { fetchMyOrders } from '../../redux/slices/orderSlice';
 import './Notifications.scss';
 
-const Notifications = () => {
+const Notifications = ({ setActiveTab, setSelectedOrderId }) => {
     const dispatch = useDispatch();
     const { items: notificationsData, loading: notifLoading, error } = useSelector((state) => state.notifications);
     const { orders, loading: ordersLoading } = useSelector((state) => state.order);
@@ -16,6 +16,25 @@ const Notifications = () => {
 
     const handleMarkAsRead = (id) => {
         dispatch(markAsRead(id));
+    };
+
+    const handleViewClick = (e, item) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!item.read && !item.isOrder) {
+            handleMarkAsRead(item.id);
+        }
+
+        if (item.isOrder || item.rawOrderId || item.orderId) {
+            const targetOrderId = item.rawOrderId || item.orderId;
+            if (targetOrderId && setSelectedOrderId) {
+                setSelectedOrderId(targetOrderId);
+            }
+            if (setActiveTab) {
+                setActiveTab('orders');
+            }
+        }
     };
 
     const formatDate = (dateString) => {
@@ -32,12 +51,14 @@ const Notifications = () => {
     const orderNotifications = (orders || []).map((order) => {
         const orderItems = order.pricing?.items || order.items || [];
         const imageUrl = orderItems.length > 0 ? orderItems[0].image : null;
-        
+        const rawId = order.orderId || order.id;
+
         return {
-            id: `order-${order.orderId || order.id}`,
-            read: true, // Assuming order notifications are read by default, or you can manage this differently
+            id: `order-${rawId}`,
+            rawOrderId: rawId,
+            read: true, // Assuming order notifications are read by default
             title: 'Order Placed',
-            message: `Your order #${order.orderNumber || order.orderId} has been placed successfully. Total: ₹${order.pricing?.finalTotal || order.pricing?.total || 0}`,
+            message: `Your order #${order.orderNumber || rawId} has been placed successfully. Total: ₹${order.pricing?.finalTotal || order.pricing?.total || 0}`,
             date: formatDate(order.createdAt),
             imageUrl: imageUrl || '/Images/Edhwi-Packetss.svg',
             isOrder: true
@@ -45,7 +66,7 @@ const Notifications = () => {
     });
 
     // Combine both notifications
-    const allNotifications = [...orderNotifications, ...notificationsData];
+    const allNotifications = [...orderNotifications, ...(notificationsData || [])];
     const loading = notifLoading || ordersLoading;
 
     if (loading && allNotifications.length === 0) {
@@ -77,12 +98,20 @@ const Notifications = () => {
                 {allNotifications.length === 0 ? (
                     <p style={{ padding: '20px', textAlign: 'center' }}>No notifications found.</p>
                 ) : (
-                    allNotifications.map((item, index) => (
-                        <div className={`notification-item ${!item.read ? 'unread' : ''}`} key={item.id} onClick={() => !item.read && !item.isOrder && handleMarkAsRead(item.id)}>
+                    allNotifications.map((item) => (
+                        <div 
+                            className={`notification-item ${!item.read ? 'unread' : ''}`} 
+                            key={item.id} 
+                            onClick={(e) => handleViewClick(e, item)}
+                        >
                             <div className="notification-left">
                                 <div className={`status-dot ${!item.read ? 'active' : ''}`}></div>
                                 <div className="product-image-box">
-                                    <img src={item.imageUrl || '/Images/Edhwi-Packetss.svg'} alt="Notification" onError={(e) => { e.target.onerror = null; e.target.src = '/Images/Edhwi-Packetss.svg'; }} />
+                                    <img 
+                                        src={item.imageUrl || '/Images/Edhwi-Packetss.svg'} 
+                                        alt="Notification" 
+                                        onError={(e) => { e.target.onerror = null; e.target.src = '/Images/Edhwi-Packetss.svg'; }} 
+                                    />
                                     {/* Fallback just in case image is missing */}
                                     {!item.imageUrl && <div className="fallback-img"></div>}
                                 </div>
@@ -93,9 +122,21 @@ const Notifications = () => {
                             </div>
                             <div className="notification-right">
                                 {!item.isOrder ? (
-                                    <a href="#view" className="view-link" onClick={(e) => { e.preventDefault(); handleMarkAsRead(item.id); }}>View</a>
+                                    <a 
+                                        href="#view" 
+                                        className="view-link" 
+                                        onClick={(e) => handleViewClick(e, item)}
+                                    >
+                                        View
+                                    </a>
                                 ) : (
-                                    <a href="/my-account" className="view-link" onClick={(e) => { e.preventDefault(); /* Could navigate to orders tab if needed */ }}>View Order</a>
+                                    <a 
+                                        href="#orders" 
+                                        className="view-link" 
+                                        onClick={(e) => handleViewClick(e, item)}
+                                    >
+                                        View Order
+                                    </a>
                                 )}
                             </div>
                         </div>

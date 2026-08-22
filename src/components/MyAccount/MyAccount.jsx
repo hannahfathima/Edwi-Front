@@ -40,7 +40,7 @@ const MyAccount = ({ setCurrentPage }) => {
             case 'coupons':
                 return <Coupons />;
             case 'notifications':
-                return <Notifications />;
+                return <Notifications setActiveTab={setActiveTab} setSelectedOrderId={setSelectedOrderId} />;
             case 'cancel-order':
                 return <CancelOrder setActiveTab={setActiveTab} cancelOrderId={cancelOrderId} setCancelOrderId={setCancelOrderId} />;
             case 'wishlist':
