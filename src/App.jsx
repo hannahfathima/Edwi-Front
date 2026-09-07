@@ -37,6 +37,7 @@ import PrivacyPolicy from "./components/Pages/PrivacyPolicy/PrivacyPolicy";
 import RefundPolicy from "./components/Pages/RefundPolicy/RefundPolicy";
 import ShippingPolicy from "./components/Pages/ShippingPolicy/ShippingPolicy";
 import TermsOfService from "./components/Pages/TermsOfService/TermsOfService";
+import FAQ from "./components/Pages/FAQ/FAQ";
 
 function App() {
   useFetchData();
@@ -92,6 +93,8 @@ function App() {
           <Route path='/refund-policy' element={<RefundPolicy />} />
           <Route path='/shipping-policy' element={<ShippingPolicy />} />
           <Route path='/terms-of-service' element={<TermsOfService />} />
+          <Route path='/faq' element={<FAQ />} />
+          <Route path='/faqs' element={<FAQ />} />
 
           <Route path='/payment-success' element={<PaymentSuccess />} />
         </Routes>
