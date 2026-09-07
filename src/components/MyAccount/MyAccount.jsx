@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import './MyAccount.scss';
 import { FiChevronRight } from 'react-icons/fi';
@@ -13,7 +13,7 @@ import CancelOrder from './CancelOrder';
 import Wishlist from './Wishlist';
 import Navbar from '../Navbar/Navbar';
 
-const MyAccount = ({ setCurrentPage }) => {
+const MyAccount = () => {
     const location = useLocation();
     const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'overview');
     const [cancelOrderId, setCancelOrderId] = useState(null);
@@ -87,7 +87,12 @@ const MyAccount = ({ setCurrentPage }) => {
                                 </div>
 
                                 <div className="sidebar-section">
-                                    <h3 className="section-title">My Orders</h3>
+                                    <h3 
+                                        className="section-title"
+                                        onClick={() => setActiveTab('orders')}
+                                    >
+                                        My Orders
+                                    </h3>
                                     <ul className="section-links">
                                         <li>
                                             <a
@@ -120,7 +125,12 @@ const MyAccount = ({ setCurrentPage }) => {
                                 </div>
 
                                 <div className="sidebar-section">
-                                    <h3 className="section-title">My Account</h3>
+                                    <h3 
+                                        className="section-title"
+                                        onClick={() => setActiveTab('settings')}
+                                    >
+                                        My Account
+                                    </h3>
                                     <ul className="section-links">
                                         <li>
                                             <a
@@ -131,15 +141,15 @@ const MyAccount = ({ setCurrentPage }) => {
                                                 My settings
                                             </a>
                                         </li>
-                                        {/* <li>
-                                        <a
-                                            href="#cards"
-                                            className={activeTab === 'cards' ? 'active-link' : ''}
-                                            onClick={(e) => { e.preventDefault(); setActiveTab('cards'); }}
-                                        >
-                                            Saved Cards
-                                        </a>
-                                    </li> */}
+                                        <li>
+                                            <a
+                                                href="#cards"
+                                                className={activeTab === 'cards' ? 'active-link' : ''}
+                                                onClick={(e) => { e.preventDefault(); setActiveTab('cards'); }}
+                                            >
+                                                Saved Cards
+                                            </a>
+                                        </li>
                                         <li>
                                             <a
                                                 href="#coupons"

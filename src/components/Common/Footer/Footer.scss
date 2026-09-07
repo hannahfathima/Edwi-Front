@@ -2,7 +2,7 @@
     background-color: #0B1857;
     /* Deep navy from image */
     color: #FFFFFF;
-    font-family: "General Sans", sans-serif-serif;
+    font-family: "General Sans", sans-serif;
     position: relative;
     overflow: hidden;
     padding-top: 60px;
@@ -45,6 +45,16 @@
     &__logo-img {
         width: 140px;
         height: auto;
+        transition: transform 0.25s ease, opacity 0.25s ease;
+
+        &:hover {
+            transform: scale(1.04);
+            opacity: 0.95;
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
 
         @media (min-width: 1024px) {
             width: 180px;
@@ -74,13 +84,10 @@
         flex-direction: column;
 
         &-title {
-            font-family: "General Sans", sans-serif-serif;
-            font-weight: 400;
-            font-style: Medium;
+            font-family: "General Sans", sans-serif;
+            font-weight: 500;
             font-size: 18px;
-            leading-trim: NONE;
             line-height: 100%;
-            letter-spacing: 0%;
             text-transform: capitalize;
             color: #6E87FF;
             /* The bright blue from the image headers */
@@ -92,9 +99,8 @@
     &__address,
     &__contact {
         p {
-            font-family: "General Sans", sans-serif-serif;
+            font-family: "General Sans", sans-serif;
             font-weight: 400;
-            font-style: Regular;
             font-size: 18px;
             leading-trim: NONE;
             line-height: 100%;
@@ -110,34 +116,48 @@
         margin-top: 24px;
 
         .footer__phone {
-            font-family: "General Sans", sans-serif-serif;
+            display: inline-block;
+            font-family: "General Sans", sans-serif;
             font-weight: 500;
-            font-style: Medium;
             font-size: 24px;
-            leading-trim: NONE;
             line-height: 130%;
-            letter-spacing: 0%;
             color: #FFFFFF;
             margin-bottom: 12px;
             letter-spacing: 0.02em;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+
+            &:hover {
+                color: #6E87FF;
+                transform: translateX(2px);
+            }
+
+            &:active {
+                opacity: 0.8;
+            }
         }
 
         a {
             display: block;
             color: #eff2f5;
-            font-family: "General Sans", sans-serif-serif;
+            font-family: "General Sans", sans-serif;
             font-weight: 400;
-            font-style: Regular;
             font-size: 16px;
-            leading-trim: NONE;
             line-height: 130%;
-            letter-spacing: 0%;
             margin-bottom: 6px;
-            transition: color 0.2s ease;
+            transition: all 0.2s ease;
             cursor: pointer;
+            text-decoration: none;
 
             &:hover {
-                color: #FFFFFF;
+                color: #6E87FF;
+                transform: translateX(3px);
+            }
+
+            &:active {
+                color: #BCC8FF;
+                opacity: 0.8;
             }
         }
     }
@@ -152,19 +172,24 @@
 
         li {
             a {
-                color: #ffff;
-                font-family: "General Sans", sans-serif-serif;
+                color: #ffffff;
+                font-family: "General Sans", sans-serif;
                 font-weight: 400;
-                // font-style: Regular;
                 font-size: 14px;
-                leading-trim: NONE;
-                line-height: 10%;
-                letter-spacing: 0%;
-
-                transition: color 0.2s ease;
+                line-height: 1.4;
+                display: inline-block;
+                text-decoration: none;
+                transition: all 0.25s ease;
+                cursor: pointer;
 
                 &:hover {
-                    color: #FFFFFF;
+                    color: #6E87FF;
+                    transform: translateX(4px);
+                }
+
+                &:active {
+                    color: #BCC8FF;
+                    transform: translateX(2px);
                 }
             }
         }
@@ -242,8 +267,15 @@
             transition: all 0.2s ease;
 
             &:hover {
-                background-color: rgba(255, 255, 255, 0.1);
-                border-color: #FFFFFF;
+                background-color: rgba(110, 135, 255, 0.2);
+                border-color: #6E87FF;
+                color: #6E87FF;
+                transform: translateY(-2px);
+            }
+
+            &:active {
+                transform: translateY(0);
+                opacity: 0.8;
             }
         }
     }

@@ -1,5 +1,5 @@
 /* Variables for premium feel */
-$primary-color: #1e3a8a; // deeply blue from their logo logic
+$primary-color: #1e40af; // Vibrant Figma blue (#1e40af)
 $primary-light: #eff6ff;
 $secondary-color: #00bcd4; // cyan from profile icon
 $cyan-light: #e0f7fa;
@@ -113,11 +113,15 @@ $danger-color: #ef4444;
         color: $text-dark;
         margin-bottom: 1.25rem;
         cursor: pointer;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: $primary-color;
+        }
 
         &.active {
-            color: #1e40af;
+            color: $primary-color;
             /* Deeper blue exactly like Figma */
-            font-size: 1.2rem;
         }
     }
 
@@ -129,15 +133,21 @@ $danger-color: #ef4444;
         a {
             color: $text-gray;
             font-size: 0.95rem;
-            transition: all 0.2s ease;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s ease;
 
             &:hover {
                 color: $primary-color;
             }
 
             &.active-link {
-                color: $text-dark;
-                font-weight: 400;
+                color: $primary-color;
+                font-weight: 500;
+
+                &:hover {
+                    color: $primary-color;
+                }
             }
         }
     }

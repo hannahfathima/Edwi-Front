@@ -29,7 +29,7 @@ const Footer = () => {
                                 <p>Pin : 679322</p>
                             </div>
                             <div className="footer__contact">
-                                <p className="footer__phone">+91 8589 8585 22</p>
+                                <a href="tel:+918589858522" className="footer__phone">+91 8589 8585 22</a>
                                 <a href="mailto:sales@edhwi.com">sales@edhwi.com</a>
                                 <a href="mailto:care@edhwi.com">care@edhwi.com</a>
                             </div>
