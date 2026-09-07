@@ -23,6 +23,18 @@ const CouponModal = ({ isOpen, onClose }) => {
         }
     }, [isOpen, status, dispatch]);
 
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
     const handleApply = () => {
         if (!selectedCoupon) {
             toast.error("Please select a coupon first");
@@ -74,8 +86,8 @@ const CouponModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="coupon-modal-overlay">
-            <div className="coupon-modal-content">
+        <div className="coupon-modal-overlay" onClick={onClose}>
+            <div className="coupon-modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
                     <h2>Apply coupons</h2>
                     <button className="close-btn" onClick={onClose}>
