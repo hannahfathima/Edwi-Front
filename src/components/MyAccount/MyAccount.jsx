@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import './MyAccount.scss';
 import { FiChevronRight } from 'react-icons/fi';
 import Overview from './Overview';
@@ -15,9 +16,17 @@ import Navbar from '../Navbar/Navbar';
 
 const MyAccount = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const { token, user } = useSelector((state) => state.auth);
     const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'overview');
     const [cancelOrderId, setCancelOrderId] = useState(null);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
+
+    useEffect(() => {
+        if (!token && !user) {
+            navigate('/');
+        }
+    }, [token, user, navigate]);
 
     useEffect(() => {
         if (location.state?.activeTab) {

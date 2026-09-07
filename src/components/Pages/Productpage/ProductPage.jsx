@@ -188,8 +188,8 @@ const ProductPage = () => {
 
                     {/* Product Image */}
                     <div className="col-lg-6 col-md-6 col-sm-12 product-page-card" style={{ position: 'relative' }}>
-                        <div 
-                            className="wishlist-icon-container" 
+                        <div
+                            className="wishlist-icon-container"
                             onClick={handleWishlistToggle}
                             style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', cursor: 'pointer', zIndex: 5, padding: '0.5rem', backgroundColor: '#fff', borderRadius: '50%', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                             title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
@@ -223,7 +223,7 @@ const ProductPage = () => {
 
                         {/* Packing Size Selector */}
                         <div className="packing-selector-container">
-                            <h4 className="packageing-select">Select packing size</h4>
+                            {/* <h4 className="packageing-select">Select packing size</h4> */}
                             <div className="size-options mt-3">
                                 {productData.sizes.map((size) => (
                                     <React.Fragment key={size}>
@@ -327,50 +327,50 @@ const ProductPage = () => {
                                 ?.filter(item => item.id !== productData.id)
                                 .slice(0, 3)
                                 .map((item) => (
-                                <div key={item.id} className="col-lg-4 col-md-6 col-sm-12">
-                                    <div 
-                                        className="other-product-card" 
-                                        onClick={() => {
-                                            navigate(`/Product-page/${item.id}`);
-                                            window.scrollTo(0, 0);
-                                        }} 
-                                        style={{ cursor: 'pointer' }}
-                                    >
-                                        <div className="other-product-image">
-                                            <img src={item.imageUrl || (item.images && item.images[0]?.url) || '/Kuppi.svg'} alt={item.name} />
-                                            <div className="add-to-cart-btn" onClick={(e) => {
-                                                e.stopPropagation();
+                                    <div key={item.id} className="col-lg-4 col-md-6 col-sm-12">
+                                        <div
+                                            className="other-product-card"
+                                            onClick={() => {
                                                 navigate(`/Product-page/${item.id}`);
                                                 window.scrollTo(0, 0);
-                                            }}>
-                                                <BsPlus />
+                                            }}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <div className="other-product-image">
+                                                <img src={item.imageUrl || (item.images && item.images[0]?.url) || '/Kuppi.svg'} alt={item.name} />
+                                                <div className="add-to-cart-btn" onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    navigate(`/Product-page/${item.id}`);
+                                                    window.scrollTo(0, 0);
+                                                }}>
+                                                    <BsPlus />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="other-product-details">
-                                            <h5>{item.name}</h5>
-                                            <p className="other-product-features">Available in <span>{item.variantCombinations && item.variantCombinations.length > 0 ? (item.variantCombinations[0].amount || item.variantCombinations[0].weight || item.variantCombinations[0].volume) : (item.sizes ? item.sizes[0] : 'Various Sizes')}</span></p>
-                                            <div className="other-product-price-details">
-                                                {(() => {
-                                                    const currentPrice = item.sellingPrice || item.price || item.priceNumber || 0;
-                                                    const originalPrice = item.mrp || currentPrice;
-                                                    
-                                                    return currentPrice < originalPrice ? (
-                                                        <div className="Price-flex">
-                                                            <span className="current-price">₹{currentPrice}</span>
-                                                            <span className="original-price">₹{originalPrice}</span>
-                                                        </div>
-                                                    ) : (
-                                                        <p className="other-product-price">
-                                                            ₹{currentPrice}
-                                                            {originalPrice > currentPrice && <span className="original-price" style={{ textDecoration: 'line-through', marginLeft: '8px', fontSize: '0.85em', color: '#888' }}>₹{originalPrice}</span>}
-                                                        </p>
-                                                    );
-                                                })()}
+                                            <div className="other-product-details">
+                                                <h5>{item.name}</h5>
+                                                <p className="other-product-features">Available in <span>{item.variantCombinations && item.variantCombinations.length > 0 ? (item.variantCombinations[0].amount || item.variantCombinations[0].weight || item.variantCombinations[0].volume) : (item.sizes ? item.sizes[0] : 'Various Sizes')}</span></p>
+                                                <div className="other-product-price-details">
+                                                    {(() => {
+                                                        const currentPrice = item.sellingPrice || item.price || item.priceNumber || 0;
+                                                        const originalPrice = item.mrp || currentPrice;
+
+                                                        return currentPrice < originalPrice ? (
+                                                            <div className="Price-flex">
+                                                                <span className="current-price">₹{currentPrice}</span>
+                                                                <span className="original-price">₹{originalPrice}</span>
+                                                            </div>
+                                                        ) : (
+                                                            <p className="other-product-price">
+                                                                ₹{currentPrice}
+                                                                {originalPrice > currentPrice && <span className="original-price" style={{ textDecoration: 'line-through', marginLeft: '8px', fontSize: '0.85em', color: '#888' }}>₹{originalPrice}</span>}
+                                                            </p>
+                                                        );
+                                                    })()}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
                         </div>
 
                     </div>

@@ -254,6 +254,13 @@ const cartSlice = createSlice({
                 state.checkoutItem = null;
                 state.isBuyNow = false;
                 state.summary = { totalMrp: 0, discount: 0, couponSavings: 0, gst: 0, delivery: 0, total: 0 };
+            })
+            .addCase('auth/logout', (state) => {
+                state.items = [];
+                state.appliedCoupon = null;
+                state.checkoutItem = null;
+                state.isBuyNow = false;
+                state.summary = { totalMrp: 0, discount: 0, couponSavings: 0, gst: 0, delivery: 0, total: 0 };
             });
     }
 });

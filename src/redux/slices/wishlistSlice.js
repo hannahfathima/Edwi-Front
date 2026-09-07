@@ -79,7 +79,12 @@ const wishlistSlice = createSlice({
             // removeFromWishlist
             .addCase(removeFromWishlist.pending, (state) => { state.loading = true; })
             .addCase(removeFromWishlist.fulfilled, (state) => { state.loading = false; })
-            .addCase(removeFromWishlist.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
+            .addCase(removeFromWishlist.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+            .addCase('auth/logout', (state) => {
+                state.items = [];
+                state.loading = false;
+                state.error = null;
+            });
     }
 });
 

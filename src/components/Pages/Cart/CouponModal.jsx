@@ -8,6 +8,13 @@ import axios from 'axios';
 import './CouponModal.scss';
 import BaseUrl from '../../../../BaseUrl';
 
+const formatValidity = (dateString) => {
+    if (!dateString) return 'No Expiry';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'No Expiry';
+    return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+};
+
 const CouponModal = ({ isOpen, onClose }) => {
     const dispatch = useDispatch();
     const [selectedCoupon, setSelectedCoupon] = useState(null);
@@ -127,12 +134,12 @@ const CouponModal = ({ isOpen, onClose }) => {
                             const id = coupon.couponId || coupon.id || coupon.code;
                             const code = coupon.code || 'UNKNOWN';
                             const discountVal = coupon.discountValue || 0;
-                            const discountType = coupon.discountType || 'PERCENTAGE';
-                            const isPercentage = discountType === 'PERCENTAGE' || discountType === 'percentage' || String(coupon.discount).includes('%');
+                            const discountType = (coupon.discountType || 'PERCENTAGE').toUpperCase();
+                            const isPercentage = discountType === 'PERCENTAGE' || String(coupon.discount).includes('%');
                             
                             const saveText = isPercentage 
                                 ? `Save ${discountVal}%` 
-                                : `Save ₹${discountVal.toFixed(2)}`;
+                                : `Save ₹${discountVal % 1 === 0 ? discountVal : discountVal.toFixed(2)}`;
                                 
                             let description = coupon.description;
                             if (!description) {
@@ -140,6 +147,8 @@ const CouponModal = ({ isOpen, onClose }) => {
                                     ? `${discountVal}% off on your purchase` 
                                     : `Flat ₹${discountVal} off on your purchase`;
                             }
+
+                            const validityText = formatValidity(coupon.validUntil || coupon.expiryDate || coupon.validity);
                             
                             return (
                                 <React.Fragment key={id}>
@@ -156,7 +165,7 @@ const CouponModal = ({ isOpen, onClose }) => {
                                             </div>
                                             <div className="coupon-save">{saveText}</div>
                                             <div className="coupon-desc">{description}</div>
-                                            {/* Not rendering expires on since the schema doesn't have it by default */}
+                                            <div className="coupon-expires">Validity: {validityText}</div>
                                         </div>
                                     </div>
                                     <div className="coupon-divider"></div>

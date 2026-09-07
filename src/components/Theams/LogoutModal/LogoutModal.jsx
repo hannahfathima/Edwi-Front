@@ -2,10 +2,13 @@ import React, { useEffect } from 'react';
 import './LogoutModal.scss';
 import { FiX, FiLogOut } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { logout } from '../../../redux/slices/authSlice';
+import { toast } from 'react-toastify';
 
 const LogoutModal = ({ isOpen, onClose }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isOpen) {
@@ -24,6 +27,8 @@ const LogoutModal = ({ isOpen, onClose }) => {
     const handleConfirm = () => {
         dispatch(logout());
         onClose();
+        navigate('/');
+        toast.success('Logged out successfully');
     };
 
     return (

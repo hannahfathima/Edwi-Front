@@ -45,30 +45,39 @@ const Coupons = () => {
             <h2 className="section-heading">COUPONS</h2>
             <div className="coupons-list-container">
                 {couponsData && couponsData.length > 0 ? (
-                    couponsData.map((coupon) => (
-                        <div className="coupon-item" key={coupon.id || coupon._id}>
-                            <div className="coupon-left">
-                                <span className="promo-text">Promo Code</span>
-                                <span className="promo-code">{coupon.code || coupon.couponCode}</span>
-                            </div>
-                            <div className="coupon-divider">
-                                <div className="discount-circle">
-                                    <span className="discount-amount">
-                                        {coupon.discountValue}
-                                        {coupon.discountType === 'percentage' ? '%' : '₹'}
-                                    </span>
-                                    <span className="discount-off">OFF</span>
+                    couponsData.map((coupon) => {
+                        const discountType = (coupon.discountType || 'PERCENTAGE').toUpperCase();
+                        const isPercentage = discountType === 'PERCENTAGE' || String(coupon.discount).includes('%');
+                        const discountVal = coupon.discountValue || 0;
+                        const description = coupon.description || (isPercentage 
+                            ? `${discountVal}% off on your purchase` 
+                            : `Flat ₹${discountVal} off on your purchase`);
+                        const validityDate = formatValidity(coupon.validUntil || coupon.expiryDate || coupon.validity);
+
+                        return (
+                            <div className="coupon-item" key={coupon.id || coupon._id}>
+                                <div className="coupon-left">
+                                    <span className="promo-text">Promo Code</span>
+                                    <span className="promo-code">{coupon.code || coupon.couponCode}</span>
+                                </div>
+                                <div className="coupon-divider">
+                                    <div className="discount-circle">
+                                        <span className="discount-amount">
+                                            {isPercentage ? `${discountVal}%` : `₹${discountVal}`}
+                                        </span>
+                                        <span className="discount-off">OFF</span>
+                                    </div>
+                                </div>
+                                <div className="coupon-right">
+                                    <p className="coupon-description">{description}</p>
+                                    <p className="coupon-validity">
+                                        <span className="validity-text">Validity</span>
+                                        <span className="validity-date">{validityDate}</span>
+                                    </p>
                                 </div>
                             </div>
-                            <div className="coupon-right">
-                                <p className="coupon-description">{coupon.description || `Get ${coupon.discountValue}${coupon.discountType === 'percentage' ? '%' : '₹'} off on your purchase`}</p>
-                                <p className="coupon-validity">
-                                    <span className="validity-text">Validity</span>
-                                    <span className="validity-date">{formatValidity(coupon.validUntil)}</span>
-                                </p>
-                            </div>
-                        </div>
-                    ))
+                        );
+                    })
                 ) : (
                     <p>No active coupons available at the moment.</p>
                 )}

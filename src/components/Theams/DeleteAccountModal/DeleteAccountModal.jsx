@@ -2,10 +2,13 @@ import React from 'react';
 import './DeleteAccountModal.scss';
 import { FiX, FiTrash2 } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { logout } from '../../../redux/slices/authSlice';
+import { toast } from 'react-toastify';
 
 const DeleteAccountModal = ({ isOpen, onClose }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     if (!isOpen) return null;
 
@@ -13,6 +16,8 @@ const DeleteAccountModal = ({ isOpen, onClose }) => {
         // Delete account backend API not available, so we log the user out for now.
         dispatch(logout());
         onClose();
+        navigate('/');
+        toast.success('Account deleted successfully');
     };
 
     return (
