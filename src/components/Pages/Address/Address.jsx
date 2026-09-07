@@ -18,7 +18,7 @@ const Address = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { addresses, selectedAddressId, loading: addressLoading } = useSelector((state) => state.address);
+    const { addresses, selectedAddressId, loading: addressLoading, initialFetchDone } = useSelector((state) => state.address);
     const { items: cartItems, summary, loading: cartLoading, appliedCoupon, isBuyNow } = useSelector((state) => state.cart);
     const { rates: shippingRates } = useSelector((state) => state.shipping);
 
@@ -44,7 +44,8 @@ const Address = () => {
 
     useEffect(() => {
         if (!addressLoading && addresses.length > 0 && !selectedAddressId) {
-            dispatch(setSelectedAddressId(addresses[0].id || addresses[0]._id));
+            const defaultAddr = addresses.find(a => a.isDefault);
+            dispatch(setSelectedAddressId(defaultAddr ? (defaultAddr.id || defaultAddr._id) : (addresses[0].id || addresses[0]._id)));
         }
     }, [addresses, addressLoading, selectedAddressId, dispatch]);
 
@@ -72,7 +73,16 @@ const Address = () => {
                 <div className="address-main-grid">
                     {/* Left Column - Addresses */}
                     <div className="address-items-section">
-                        {addresses.length === 0 ? (
+                        {(!initialFetchDone && addresses.length === 0) || (addressLoading && addresses.length === 0) ? (
+                            <div className="address-loading-skeleton">
+                                <div className="address-skeleton-title"></div>
+                                <div className="address-skeleton-card">
+                                    <div className="skeleton-line skeleton-radio-title"></div>
+                                    <div className="skeleton-line skeleton-body"></div>
+                                    <div className="skeleton-line skeleton-body-short"></div>
+                                </div>
+                            </div>
+                        ) : addresses.length === 0 ? (
                             <div className="inline-address-form-container">
                                 <EditAddressModal isInline={true} mode="add" />
                             </div>
@@ -97,7 +107,7 @@ const Address = () => {
                                                     />
                                                     <span className="address-name">{address.fullName}</span>
                                                 </label>
-                                                <span className="address-type-badge">{address.addressType === 'work' ? 'Office' : 'Home'}</span>
+                                                <span className="address-type-badge">{address.addressType === 'work' || address.addressType === 'Office' ? 'Office' : 'Home'}</span>
                                             </div>
                                             <div className="address-details">
                                                 {address.addressLine1}, {address.addressLine2 ? address.addressLine2 + ', ' : ''}

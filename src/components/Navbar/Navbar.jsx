@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout, setLoginModalOpen } from '../../redux/slices/authSlice';
 import { fetchCart } from '../../redux/slices/cartSlice';
 import { fetchWishlist } from '../../redux/slices/wishlistSlice';
+import { fetchAddresses } from '../../redux/slices/addressSlice';
 import LoginModal from '../Theams/LoginModal/LoginModal';
 import OtpVerificationModal from '../Theams/LoginModal/OtpVerificationModal';
 import SignupModal from '../Theams/LoginModal/SignupModal';
@@ -28,6 +29,7 @@ const Navbar = ({ setCurrentPage }) => {
         if (token) {
             dispatch(fetchCart());
             dispatch(fetchWishlist());
+            dispatch(fetchAddresses());
         }
     }, [dispatch, token]);
 
