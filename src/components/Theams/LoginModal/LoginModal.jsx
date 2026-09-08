@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendMobileOtp, sendEmailOtp, loginWithGoogle } from '../../../redux/slices/authSlice';
+import { sendMobileOtp, sendEmailOtp, loginWithGoogle, clearLoginError } from '../../../redux/slices/authSlice';
 import './LoginModal.scss';
 import { FiX } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
@@ -11,19 +11,24 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
     const [localError, setLocalError] = useState('');
 
     const dispatch = useDispatch();
-    const { loading, error } = useSelector((state) => state.auth);
+    const { loading, loginError } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+            dispatch(clearLoginError());
+            setLocalError('');
         } else {
             document.body.style.overflow = 'unset';
+            dispatch(clearLoginError());
+            setLocalError('');
         }
 
         return () => {
             document.body.style.overflow = 'unset';
+            dispatch(clearLoginError());
         };
-    }, [isOpen]);
+    }, [isOpen, dispatch]);
 
     const login = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
@@ -96,16 +101,20 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
                                 type="text"
                                 id="loginId"
                                 value={loginId}
-                                onChange={(e) => { setLoginId(e.target.value); setLocalError(''); }}
+                                onChange={(e) => {
+                                    setLoginId(e.target.value);
+                                    setLocalError('');
+                                    if (loginError) dispatch(clearLoginError());
+                                }}
                                 placeholder="Mobile Number"
                                 className="form-control"
                                 required
                             />
                         </div>
 
-                        {(error || localError) && (
+                        {(loginError || localError) && (
                             <div style={{ color: "red", fontSize: "12px", marginBottom: "15px" }}>
-                                {error || localError}
+                                {loginError || localError}
                             </div>
                         )}
 

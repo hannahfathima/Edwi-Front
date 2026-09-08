@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { signupWithEmail } from '../../../redux/slices/authSlice';
+import { signupWithEmail, clearSignupError } from '../../../redux/slices/authSlice';
 import './LoginModal.scss'; // Assuming we re-use same modal styles
 import { FiX, FiEye, FiEyeOff } from 'react-icons/fi';
 
-const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
+const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginRequest }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: initialEmail,
@@ -18,34 +18,76 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
     const [localError, setLocalError] = useState('');
 
     const dispatch = useDispatch();
-    const { loading, error } = useSelector((state) => state.auth);
+    const { loading, signupError } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+            dispatch(clearSignupError());
+            setLocalError('');
+            if (initialEmail) {
+                setFormData((prev) => ({ ...prev, email: initialEmail }));
+            }
         } else {
             document.body.style.overflow = 'unset';
+            dispatch(clearSignupError());
+            setLocalError('');
         }
 
         return () => {
             document.body.style.overflow = 'unset';
+            dispatch(clearSignupError());
         };
-    }, [isOpen]);
+    }, [isOpen, initialEmail, dispatch]);
 
     if (!isOpen) return null;
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value
-        });
+        let finalValue = value;
+
+        if (name === 'name') {
+            // Allow only letters and spaces (strips out any numbers or special characters)
+            finalValue = value.replace(/[^a-zA-Z\s]/g, '');
+        }
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : finalValue
+        }));
         setLocalError('');
+        if (signupError) dispatch(clearSignupError());
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.target.name === 'name') {
+            // Allow navigation/editing keys and shortcuts (Ctrl/Cmd/Alt)
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            // Block keys that are not letters or space
+            if (e.key.length === 1 && !/^[a-zA-Z\s]$/.test(e.key)) {
+                e.preventDefault();
+            }
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLocalError('');
+
+        if (!formData.name.trim()) {
+            setLocalError('Please enter your name');
+            return;
+        }
+
+        if (formData.name.trim().length < 2) {
+            setLocalError('Name must be at least 2 characters');
+            return;
+        }
+
+        if (!/^[a-zA-Z\s]+$/.test(formData.name.trim())) {
+            setLocalError('Name can only contain letters and spaces');
+            return;
+        }
 
         if (formData.password !== formData.confirmPassword) {
             setLocalError('Passwords do not match');
@@ -86,7 +128,9 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
+                                onKeyDown={handleKeyDown}
                                 className="form-control"
+                                placeholder="Enter your name"
                                 required
                             />
                         </div>
@@ -181,15 +225,30 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '' }) => {
                             </label>
                         </div>
 
-                        {(error || localError) && (
-                            <div style={{ color: "red", fontSize: "12px" }}>
-                                {error || localError}
+                        {(signupError || localError) && (
+                            <div style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
+                                {signupError || localError}
                             </div>
                         )}
 
                         <button type="submit" className="login-modal__submit-btn" disabled={loading}>
                             {loading ? 'Creating account...' : 'Continue'}
                         </button>
+
+                        {onLoginRequest && (
+                            <div style={{ marginTop: "15px", textAlign: "center", fontSize: "13px", color: "#555" }}>
+                                Already have an account?{' '}
+                                <span
+                                    onClick={() => {
+                                        if (onClose) onClose();
+                                        onLoginRequest();
+                                    }}
+                                    style={{ color: "#1877F2", cursor: "pointer", fontWeight: "600" }}
+                                >
+                                    Log in
+                                </span>
+                            </div>
+                        )}
                     </form>
                 </div>
             </div>

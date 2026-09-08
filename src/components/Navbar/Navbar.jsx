@@ -3,7 +3,7 @@ import './Navbar.scss';
 import { FiHeart, FiShoppingBag, FiUser, FiMenu, FiX } from 'react-icons/fi';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, setLoginModalOpen } from '../../redux/slices/authSlice';
+import { logout, setLoginModalOpen, clearLoginError, clearSignupError, clearOtpError } from '../../redux/slices/authSlice';
 import { fetchCart } from '../../redux/slices/cartSlice';
 import { fetchWishlist } from '../../redux/slices/wishlistSlice';
 import { fetchAddresses } from '../../redux/slices/addressSlice';
@@ -276,22 +276,30 @@ const Navbar = ({ setCurrentPage }) => {
             {/* Login Modal */}
             <LoginModal
                 isOpen={isLoginModalOpen}
-                onClose={() => dispatch(setLoginModalOpen(false))}
+                onClose={() => {
+                    dispatch(setLoginModalOpen(false));
+                    dispatch(clearLoginError());
+                }}
                 onOtpRequest={(data) => {
                     setOtpSessionData(data);
                     dispatch(setLoginModalOpen(false));
+                    dispatch(clearLoginError());
                     setIsOtpModalOpen(true);
                 }}
                 onSignupRequest={(email) => {
                     setOtpSessionData({ value: email });
                     dispatch(setLoginModalOpen(false));
+                    dispatch(clearLoginError());
                     setIsSignupModalOpen(true);
                 }}
             />
 
             <OtpVerificationModal
                 isOpen={isOtpModalOpen}
-                onClose={() => setIsOtpModalOpen(false)}
+                onClose={() => {
+                    setIsOtpModalOpen(false);
+                    dispatch(clearOtpError());
+                }}
                 formData={otpSessionData}
                 onSuccess={(payload) => {
                     setIsOtpModalOpen(false);
@@ -300,9 +308,17 @@ const Navbar = ({ setCurrentPage }) => {
 
             <SignupModal
                 isOpen={isSignupModalOpen}
-                onClose={() => setIsSignupModalOpen(false)}
+                onClose={() => {
+                    setIsSignupModalOpen(false);
+                    dispatch(clearSignupError());
+                }}
                 initialEmail={otpSessionData?.value || ''}
                 onSuccess={() => setIsSignupModalOpen(false)}
+                onLoginRequest={() => {
+                    setIsSignupModalOpen(false);
+                    dispatch(clearSignupError());
+                    dispatch(setLoginModalOpen(true));
+                }}
             />
 
             <LogoutModal

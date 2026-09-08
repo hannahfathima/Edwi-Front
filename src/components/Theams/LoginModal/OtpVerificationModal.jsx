@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { verifyMobileOtp, verifyEmailOtp } from '../../../redux/slices/authSlice';
+import { verifyMobileOtp, verifyEmailOtp, clearOtpError } from '../../../redux/slices/authSlice';
 import './LoginModal.scss'; // Assuming we re-use same modal styles
 import { FiX } from 'react-icons/fi';
 
@@ -10,19 +10,24 @@ const OtpVerificationModal = ({ isOpen, onClose, onSuccess, formData }) => {
     const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
     const dispatch = useDispatch();
-    const { loading, error } = useSelector((state) => state.auth);
+    const { loading, otpError } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+            dispatch(clearOtpError());
+            setLocalError('');
         } else {
             document.body.style.overflow = 'unset';
+            dispatch(clearOtpError());
+            setLocalError('');
         }
 
         return () => {
             document.body.style.overflow = 'unset';
+            dispatch(clearOtpError());
         };
-    }, [isOpen]);
+    }, [isOpen, dispatch]);
 
     if (!isOpen) return null;
 
@@ -33,6 +38,7 @@ const OtpVerificationModal = ({ isOpen, onClose, onSuccess, formData }) => {
         newOtp[index] = value;
         setOtp(newOtp);
         setLocalError('');
+        if (otpError) dispatch(clearOtpError());
 
         // Move to next input
         if (value && index < 3) {
@@ -109,9 +115,9 @@ const OtpVerificationModal = ({ isOpen, onClose, onSuccess, formData }) => {
                             </div>
                         </div>
 
-                        {(error || localError) && (
+                        {(otpError || localError) && (
                             <div style={{ color: "red", fontSize: "12px", marginBottom: "15px" }}>
-                                {error || localError}
+                                {otpError || localError}
                             </div>
                         )}
 

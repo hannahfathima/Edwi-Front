@@ -108,6 +108,9 @@ const authSlice = createSlice({
         token: localStorage.getItem('token') || null,
         loading: false,
         error: null,
+        loginError: null,
+        signupError: null,
+        otpError: null,
         otpSessionData: null, // Stores email/mobile when moving from Login to OTP Modal
         isNewUser: false,
         isLoginModalOpen: false
@@ -120,6 +123,19 @@ const authSlice = createSlice({
         },
         clearError: (state) => {
             state.error = null;
+            state.loginError = null;
+            state.signupError = null;
+            state.otpError = null;
+        },
+        clearLoginError: (state) => {
+            state.loginError = null;
+            state.error = null;
+        },
+        clearSignupError: (state) => {
+            state.signupError = null;
+        },
+        clearOtpError: (state) => {
+            state.otpError = null;
         },
         setOtpSessionData: (state, action) => {
             state.otpSessionData = action.payload; // { type: 'email' | 'mobile', value: string }
@@ -134,67 +150,76 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             // sendMobileOtp
-            .addCase(sendMobileOtp.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(sendMobileOtp.pending, (state) => { state.loading = true; state.loginError = null; state.error = null; })
             .addCase(sendMobileOtp.fulfilled, (state, action) => {
                 state.loading = false;
                 state.isNewUser = action.payload.isNewUser;
             })
-            .addCase(sendMobileOtp.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+            .addCase(sendMobileOtp.rejected, (state, action) => { state.loading = false; state.loginError = action.payload; state.error = action.payload; })
 
             // verifyMobileOtp
-            .addCase(verifyMobileOtp.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(verifyMobileOtp.pending, (state) => { state.loading = true; state.otpError = null; })
             .addCase(verifyMobileOtp.fulfilled, (state, action) => {
                 state.loading = false;
                 if (action.payload.user) state.user = action.payload.user;
                 if (action.payload.token) state.token = action.payload.token;
             })
-            .addCase(verifyMobileOtp.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+            .addCase(verifyMobileOtp.rejected, (state, action) => { state.loading = false; state.otpError = action.payload; })
 
             // sendEmailOtp
-            .addCase(sendEmailOtp.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(sendEmailOtp.pending, (state) => { state.loading = true; state.loginError = null; state.error = null; })
             .addCase(sendEmailOtp.fulfilled, (state, action) => {
                 state.loading = false;
                 state.isNewUser = action.payload.isNewUser;
             })
-            .addCase(sendEmailOtp.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+            .addCase(sendEmailOtp.rejected, (state, action) => { state.loading = false; state.loginError = action.payload; state.error = action.payload; })
 
             // verifyEmailOtp
-            .addCase(verifyEmailOtp.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(verifyEmailOtp.pending, (state) => { state.loading = true; state.otpError = null; })
             .addCase(verifyEmailOtp.fulfilled, (state, action) => {
                 state.loading = false;
                 if (action.payload.user) state.user = action.payload.user;
                 if (action.payload.token) state.token = action.payload.token;
             })
-            .addCase(verifyEmailOtp.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+            .addCase(verifyEmailOtp.rejected, (state, action) => { state.loading = false; state.otpError = action.payload; })
 
             // loginWithEmail
-            .addCase(loginWithEmail.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(loginWithEmail.pending, (state) => { state.loading = true; state.loginError = null; state.error = null; })
             .addCase(loginWithEmail.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload.user;
                 state.token = action.payload.token;
             })
-            .addCase(loginWithEmail.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+            .addCase(loginWithEmail.rejected, (state, action) => { state.loading = false; state.loginError = action.payload; state.error = action.payload; })
 
             // signupWithEmail
-            .addCase(signupWithEmail.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(signupWithEmail.pending, (state) => { state.loading = true; state.signupError = null; })
             .addCase(signupWithEmail.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload.user;
                 state.token = action.payload.token;
             })
-            .addCase(signupWithEmail.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+            .addCase(signupWithEmail.rejected, (state, action) => { state.loading = false; state.signupError = action.payload; })
 
             // loginWithGoogle
-            .addCase(loginWithGoogle.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(loginWithGoogle.pending, (state) => { state.loading = true; state.loginError = null; state.error = null; })
             .addCase(loginWithGoogle.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload.user;
                 state.token = action.payload.token;
             })
-            .addCase(loginWithGoogle.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
+            .addCase(loginWithGoogle.rejected, (state, action) => { state.loading = false; state.loginError = action.payload; state.error = action.payload; });
     }
 });
 
-export const { logout, clearError, setOtpSessionData, clearOtpSessionData, setLoginModalOpen } = authSlice.actions;
+export const {
+    logout,
+    clearError,
+    clearLoginError,
+    clearSignupError,
+    clearOtpError,
+    setOtpSessionData,
+    clearOtpSessionData,
+    setLoginModalOpen
+} = authSlice.actions;
 export default authSlice.reducer;
