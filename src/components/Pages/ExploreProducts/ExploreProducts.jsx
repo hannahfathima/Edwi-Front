@@ -63,7 +63,29 @@ const ExploreProducts = () => {
     // Use Redux products, fallback to empty array
     const allProductsData = reduxProducts || [];
 
-    // Wishlist toggle directly interacting with backend
+    const dynamicCategories = useMemo(() => {
+        const catMap = new Map();
+        allProductsData.forEach(product => {
+            if (product.categoryId && product.categoryName) {
+                catMap.set(product.categoryId, product.categoryName);
+            }
+        });
+        const categories = [{ id: 'all', name: 'All Categories' }];
+        catMap.forEach((name, id) => {
+            categories.push({ id: id.toString(), name });
+        });
+        return categories;
+    }, [allProductsData]);
+
+    const dynamicMobileCategories = useMemo(() => {
+        const categories = new Set(['All']);
+        allProductsData.forEach(product => {
+            if (product.categoryName) {
+                categories.add(product.categoryName);
+            }
+        });
+        return Array.from(categories);
+    }, [allProductsData]);
     const handleWishlistToggle = useCallback((e, productId) => {
         e.preventDefault();
         e.stopPropagation();
@@ -349,7 +371,7 @@ const ExploreProducts = () => {
                 <div className="cards-and-filter">
                     {!isMobile && sideBarIsOpen && (
                         <div className="left-side">
-                            <Productsidebar onFiltersChange={handleFiltersChange} />
+                            <Productsidebar onFiltersChange={handleFiltersChange} categories={dynamicCategories} />
                         </div>
                     )}
 
@@ -359,6 +381,7 @@ const ExploreProducts = () => {
                             onToggle={handleMobileSideBar}
                             showTriggerButton={false}
                             onFiltersChange={handleFiltersChange}
+                            categoriesData={dynamicMobileCategories}
                         />
                     )}
 

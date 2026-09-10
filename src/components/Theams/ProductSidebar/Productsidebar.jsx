@@ -55,7 +55,7 @@ const ArrowIcon = ({ isOpen }) => (
     </svg>
 );
 
-const Productsidebar = ({ onFiltersChange }) => {
+const Productsidebar = ({ onFiltersChange, categories = staticCategories }) => {
     const [openSection, setOpenSection] = useState(null);
 
     const [selectedFilters, setSelectedFilters] = useState({
@@ -117,7 +117,7 @@ const Productsidebar = ({ onFiltersChange }) => {
         const searchTerm = searchTerms[section].toLowerCase();
 
         if (section === 'categories') {
-            return staticCategories.filter(category =>
+            return categories.filter(category =>
                 category.name.toLowerCase().includes(searchTerm)
             );
         }
@@ -218,7 +218,8 @@ const Productsidebar = ({ onFiltersChange }) => {
                 )}
             </div>
 
-            {/* Colors Section */}
+            {/* Colors Section hidden as per request */}
+            {/*
             <div className="Filter_Section-M">
                 <div className="filter-header" onClick={() => toggleSection('colors')}>
                     <span className="filter-title">Colors</span>
@@ -277,6 +278,7 @@ const Productsidebar = ({ onFiltersChange }) => {
                     </div>
                 )}
             </div>
+            */}
         </div>
     );
 };

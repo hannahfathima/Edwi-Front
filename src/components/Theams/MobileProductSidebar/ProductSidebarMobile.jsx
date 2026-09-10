@@ -5,7 +5,15 @@ import { MdOutlineArrowDropDown } from 'react-icons/md';
 import { IoIosArrowDown } from 'react-icons/io';
 import { CiSearch } from 'react-icons/ci';
 
-const ProductSidebarMobile = ({ isOpen: externalIsOpen, onToggle, showTriggerButton = true }) => {
+const ProductSidebarMobile = ({ isOpen: externalIsOpen, onToggle, showTriggerButton = true, categoriesData = [
+        'All',
+        'T-shirts',
+        'Notebooks',
+        'Packaging',
+        'Caps',
+        'Other bags',
+        'Eco friendly'
+    ] }) => {
     const [internalIsOpen, setInternalIsOpen] = useState(false);
     const [expandedSections, setExpandedSections] = useState({
         categories: true,
@@ -21,15 +29,8 @@ const ProductSidebarMobile = ({ isOpen: externalIsOpen, onToggle, showTriggerBut
     const [selectedPriceRange, setSelectedPriceRange] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
 
-    const categories = [
-        'All',
-        'T-shirts',
-        'Notebooks',
-        'Packaging',
-        'Caps',
-        'Other bags',
-        'Eco friendly'
-    ];
+    const categories = categoriesData;
+    // Default categories if none provided
 
     const priceRanges = [
         '₹10 - 500',
@@ -199,7 +200,8 @@ const ProductSidebarMobile = ({ isOpen: externalIsOpen, onToggle, showTriggerBut
                         )}
                     </div>
 
-                    {/* Colors Section */}
+                    {/* Colors Section Hidden */}
+                    {/* 
                     <div className="filter-section">
                         <button
                             onClick={() => toggleSection('colors')}
@@ -232,6 +234,7 @@ const ProductSidebarMobile = ({ isOpen: externalIsOpen, onToggle, showTriggerBut
                             </div>
                         )}
                     </div>
+                    */}
                 </div>
 
                 {/* Apply Button */}
