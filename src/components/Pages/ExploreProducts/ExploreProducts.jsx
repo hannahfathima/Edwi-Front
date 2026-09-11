@@ -13,7 +13,7 @@ import Navbar from '../../Navbar/Navbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProducts } from '../../../redux/slices/dataSlice'
 import { addToWishlist, removeFromWishlist } from '../../../redux/slices/wishlistSlice'
-import { addToCart } from '../../../redux/slices/cartSlice'
+import { addToCart, removeFromCart } from '../../../redux/slices/cartSlice'
 import { setLoginModalOpen } from '../../../redux/slices/authSlice'
 import ToastModal from '../../common/ToastModal/ToastModal'
 
@@ -141,32 +141,42 @@ const ExploreProducts = () => {
 
         setLoadingProducts(prev => new Set(prev).add(product.id));
 
-        let variantCombination = null;
-        if (product.variantCombinations && product.variantCombinations.length > 0) {
-            variantCombination = product.variantCombinations[0].amount || product.variantCombinations[0].weight || product.variantCombinations[0].volume;
-        } else if (product.sizes && product.sizes.length > 0) {
-            variantCombination = product.sizes[0];
-        }
+        const isProductInCart = cartItems.some(item => item.productId === product.id?.toString() || item.productId === product.id);
 
         try {
-            await dispatch(addToCart({
-                productId: product.id.toString(),
-                quantity: 1,
-                sellingPrice: product.sellingPrice || product.price,
-                mrp: product.mrp || product.price,
-                ...(variantCombination && { variantCombination })
-            })).unwrap();
+            if (isProductInCart) {
+                await dispatch(removeFromCart({ productId: product.id.toString() })).unwrap();
+                setToastConfig({
+                    isOpen: true,
+                    message: 'Product removed from cart!',
+                    type: 'success'
+                });
+            } else {
+                let variantCombination = null;
+                if (product.variantCombinations && product.variantCombinations.length > 0) {
+                    variantCombination = product.variantCombinations[0].amount || product.variantCombinations[0].weight || product.variantCombinations[0].volume;
+                } else if (product.sizes && product.sizes.length > 0) {
+                    variantCombination = product.sizes[0];
+                }
 
-            setToastConfig({
-                isOpen: true,
-                message: 'Product added to cart!',
-                type: 'success'
-            });
+                await dispatch(addToCart({
+                    productId: product.id.toString(),
+                    quantity: 1,
+                    sellingPrice: product.sellingPrice || product.price,
+                    mrp: product.mrp || product.price,
+                    ...(variantCombination && { variantCombination })
+                })).unwrap();
 
+                setToastConfig({
+                    isOpen: true,
+                    message: 'Product added to cart!',
+                    type: 'success'
+                });
+            }
         } catch (error) {
             setToastConfig({
                 isOpen: true,
-                message: error || 'Failed to add product to cart',
+                message: error || (isProductInCart ? 'Failed to remove product from cart' : 'Failed to add product to cart'),
                 type: 'error'
             });
         } finally {
@@ -176,7 +186,7 @@ const ExploreProducts = () => {
                 return newSet;
             });
         }
-    }, [dispatch, token, user]);
+    }, [dispatch, token, user, cartItems]);
 
     // Get cart button content
     const getAddButtonContent = useCallback((productId) => {
