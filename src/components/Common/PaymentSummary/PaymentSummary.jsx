@@ -25,7 +25,7 @@ const PaymentSummary = ({
                 <div className="summary-details">
                     <div className="summary-row">
                         <span className="row-label">Subtotal</span>
-                        <span className="row-value">₹{(subtotal || 0).toFixed(2)}</span>
+                        <span className="row-value">₹{((subtotal || 0) - (applicableGst || 0)).toFixed(2)}</span>
                     </div>
 
                     {discountOnMrp > 0 && (
@@ -44,8 +44,8 @@ const PaymentSummary = ({
 
                     <div className="summary-row">
                         <span className="row-label">Applicable GST</span>
-                        <span className="row-value" style={{ color: '#666', fontWeight: '400', fontSize: '0.9rem' }}>
-                            Included (₹{(applicableGst || 0).toFixed(2)})
+                        <span className="row-value">
+                            ₹{(applicableGst || 0).toFixed(2)}
                         </span>
                     </div>
 
