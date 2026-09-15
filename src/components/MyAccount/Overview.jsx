@@ -48,6 +48,17 @@ const Overview = ({ setActiveTab }) => {
                             <p>{user?.phone || 'No phone provided'}</p>
                         </div>
                     </div>
+                    {user?.authProvider !== 'google' && user?.authProvider !== 'phone' && (
+                        <button 
+                            className="edit-btn" 
+                            onClick={() => {
+                                if (setActiveTab) setActiveTab('settings');
+                            }}
+                        >
+                            <FiEdit2 style={{ marginRight: '5px' }} />
+                            Edit Profile
+                        </button>
+                    )}
                 </div>
             </section>
 

@@ -101,6 +101,24 @@ export const loginWithGoogle = createAsyncThunk(
     }
 );
 
+export const updateProfile = createAsyncThunk(
+    'auth/updateProfile',
+    async (updateData, { getState, rejectWithValue }) => {
+        try {
+            const { token } = getState().auth;
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            const response = await axios.post(`${BaseUrl}/update-profile`, updateData, config);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to update profile');
+        }
+    }
+);
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -208,7 +226,17 @@ const authSlice = createSlice({
                 state.user = action.payload.user;
                 state.token = action.payload.token;
             })
-            .addCase(loginWithGoogle.rejected, (state, action) => { state.loading = false; state.loginError = action.payload; state.error = action.payload; });
+            .addCase(loginWithGoogle.rejected, (state, action) => { state.loading = false; state.loginError = action.payload; state.error = action.payload; })
+
+            // updateProfile
+            .addCase(updateProfile.pending, (state) => { state.loading = true; })
+            .addCase(updateProfile.fulfilled, (state, action) => {
+                state.loading = false;
+                if (action.payload.user) {
+                    state.user = action.payload.user;
+                }
+            })
+            .addCase(updateProfile.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
     }
 });
 

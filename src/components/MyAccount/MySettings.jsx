@@ -6,6 +6,7 @@ import './MySettings.scss';
 import { FiLock, FiTrash2, FiLogOut } from 'react-icons/fi';
 import LogoutModal from '../Theams/LogoutModal/LogoutModal';
 import DeleteAccountModal from '../Theams/DeleteAccountModal/DeleteAccountModal';
+import EditProfileModal from '../Theams/EditProfileModal/EditProfileModal';
 
 const MySettings = () => {
     const { user } = useSelector((state) => state.auth);
@@ -14,6 +15,7 @@ const MySettings = () => {
 
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const handleLogoutClick = () => {
         setIsLogoutModalOpen(true);
@@ -45,7 +47,7 @@ const MySettings = () => {
                 <h3 className="group-title">PRIVACY</h3>
                 <div className="action-cards">
                     {user?.authProvider !== 'google' && (
-                        <div className="action-card" style={{ cursor: 'pointer' }}>
+                        <div className="action-card" style={{ cursor: 'pointer' }} onClick={() => setIsEditModalOpen(true)}>
                             <FiLock className="action-icon" />
                             <span className="action-text">Change Password</span>
                         </div>
@@ -68,6 +70,10 @@ const MySettings = () => {
             <DeleteAccountModal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
+            />
+            <EditProfileModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
             />
         </section>
     );
