@@ -58,28 +58,6 @@ const FAQ = () => {
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      // We need to wait for filteredFaqs to evaluate, but since it's synchronous, we can just find the first match here
-      const trimmedQuery = searchQuery.trim().toLowerCase();
-      for (const cat of categories) {
-        for (const faq of (cat.faqs || [])) {
-          const q = faq.question || '';
-          const a = faq.answer || '';
-          const cName = cat.name || '';
-          if (
-            q.toLowerCase().includes(trimmedQuery) ||
-            a.toLowerCase().includes(trimmedQuery) ||
-            cName.toLowerCase().includes(trimmedQuery)
-          ) {
-            setExpandedId(faq.id || faq.faqId);
-            return;
-          }
-        }
-      }
-    }
-  }, [searchQuery, categories]);
-
   // Filter dynamic FAQs based on search query or active category
   const filteredFaqs = useMemo(() => {
     const trimmedQuery = searchQuery.trim().toLowerCase();
