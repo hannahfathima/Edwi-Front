@@ -63,7 +63,7 @@ const HomeBanner = ({ setCurrentPage }) => {
                 <div className="home-banner__text-container">
                     <h6 className="home-banner__title">
                         {currentBanner ? (
-                            <div dangerouslySetInnerHTML={{ __html: (currentBanner.title || '').replace(/\n/g, '<br />') }} />
+                            <span dangerouslySetInnerHTML={{ __html: (currentBanner.title || '').replace(/\n/g, '<br />') }} />
                         ) : (
                             <>
                                 Kerala's authentic taste<br />
@@ -73,7 +73,7 @@ const HomeBanner = ({ setCurrentPage }) => {
                     </h6>
                     <p className="home-banner__subtitle">
                         {currentBanner?.subtitle ? (
-                            <div dangerouslySetInnerHTML={{ __html: (currentBanner.subtitle || '').replace(/\n/g, '<br />') }} />
+                            <span dangerouslySetInnerHTML={{ __html: (currentBanner.subtitle || '').replace(/\n/g, '<br />') }} />
                         ) : (
                             <>
                                 Kerala flavours that make every bite feel warm,<br className="desktop-only" />

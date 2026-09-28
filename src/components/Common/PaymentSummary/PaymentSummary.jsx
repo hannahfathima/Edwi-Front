@@ -15,6 +15,10 @@ const PaymentSummary = ({
     className = '',
     disabled = false
 }) => {
+
+    
+
+
     const totalSavings = (discountOnMrp || 0) + (couponSavings || 0);
 
     return (
