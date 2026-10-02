@@ -30,6 +30,10 @@
                     text-shadow: none;
                     font-weight: 500;
 
+                    &:hover {
+                        color: #13368E;
+                    }
+
                     &.active {
                         color: #13368E !important;
                         font-weight: 700 !important;
@@ -51,6 +55,15 @@
                 svg {
                     color: #000;
                     filter: none;
+                }
+
+                &:hover {
+                    span {
+                        color: #13368E;
+                    }
+                    svg {
+                        color: #13368E;
+                    }
                 }
 
                 &.active {
@@ -124,7 +137,7 @@
             padding-bottom: 4px;
 
             &:hover {
-                opacity: 0.8;
+                color: #ffc107;
             }
 
             &.active {
@@ -188,7 +201,9 @@
         }
 
         &:hover {
-            opacity: 0.8;
+            span, svg {
+                color: #ffc107;
+            }
         }
     }
 
