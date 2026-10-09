@@ -89,6 +89,12 @@ const Productsidebar = ({ onFiltersChange, categories = staticCategories }) => {
                 }
                 newFilters.categories = categories;
             }
+        } else if (section === 'price') {
+            if (selectedFilters.price.includes(value)) {
+                newFilters.price = [];
+            } else {
+                newFilters.price = [value];
+            }
         } else {
             const currentSelection = selectedFilters[section];
             if (currentSelection.includes(value)) {
