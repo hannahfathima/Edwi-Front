@@ -69,8 +69,10 @@ const ContactUs = () => {
       newErrors.firstName = 'Numbers are not allowed in name';
     }
 
-    if (!phone || phone.trim().length <= 3) {
+    if (!phone || phone.trim().length === 0) {
       newErrors.phone = 'Phone number is required';
+    } else if (phone.trim().length !== 12) {
+      newErrors.phone = 'Phone number must be 12 digits including country code';
     }
 
     if (!formData.email.trim()) {
@@ -155,6 +157,7 @@ const ContactUs = () => {
                     country={'in'}
                     value={phone}
                     onChange={handlePhoneChange}
+                    countryCodeEditable={false}
                     placeholder="9234 567 897"
                     containerClass={`phone-container ${errors.phone ? 'error' : ''}`}
                     inputClass="phone-input"
