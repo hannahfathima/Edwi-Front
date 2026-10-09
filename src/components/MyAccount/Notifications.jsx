@@ -65,8 +65,15 @@ const Notifications = ({ setActiveTab, setSelectedOrderId }) => {
         };
     });
 
+    // Filter out backend order notifications to avoid duplicates with the dynamically generated ones, 
+    // and to remove any old mock data like 'OD20' that might be stuck in the database.
+    const validNotificationsData = (notificationsData || []).filter(
+        notif => !(notif.message && notif.message.toLowerCase().includes('your order')) &&
+                 !(notif.title && notif.title.toLowerCase().includes('order placed'))
+    );
+
     // Combine both notifications
-    const allNotifications = [...orderNotifications, ...(notificationsData || [])];
+    const allNotifications = [...orderNotifications, ...validNotificationsData];
     const loading = notifLoading || ordersLoading;
 
     if (loading && allNotifications.length === 0) {
