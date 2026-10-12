@@ -1,6 +1,11 @@
 .contact-us-page {
   font-family: 'Inter', sans-serif;
 
+  .contact-breadcrumb {
+    position: relative;
+    z-index: 10;
+  }
+
   .contact-top-section {
     background: linear-gradient(to right, #DFF1F1 0%, #DEF9FF 50%, #d8e5ff 100%);
     // In the future, you can add background-image: url('../../../assets/leaves.jpg') here and mix it.

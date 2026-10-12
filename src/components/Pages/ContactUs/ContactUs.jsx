@@ -113,7 +113,7 @@ const ContactUs = () => {
     <div className="contact-us-page">
       {/* Top Section */}
       <Navbar />
-      <div className="container-fluid pt-3 pb-1" style={{ maxWidth: '1440px', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+      <div className="container-fluid contact-breadcrumb pb-1" style={{ maxWidth: '1440px', margin: '0 auto', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingTop: '90px' }}>
         <div className="breadcrumb" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#666' }}>
           <Link to="/" style={{ color: '#555', textDecoration: 'none' }}>Home</Link>
           <span>›</span>
