@@ -360,7 +360,7 @@
             font-family: "General Sans", sans-serif-serif;
             font-weight: 400;
             font-style: Regular;
-            font-size: 18px;
+            font-size: 16px;
             leading-trim: NONE;
             line-height: 140%;
             letter-spacing: -2%;
@@ -411,6 +411,12 @@
 
         .info-block .info-text .phone-list {
           grid-template-columns: 1fr;
+
+          p {
+
+            font-size: 12px !important;
+
+          }
         }
       }
     }

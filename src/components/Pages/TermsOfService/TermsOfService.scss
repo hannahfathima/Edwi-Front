@@ -7,7 +7,8 @@
   overflow-x: hidden;
 
   // Background blobs for aesthetic
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
     border-radius: 50%;
@@ -15,7 +16,7 @@
     z-index: 0;
     pointer-events: none;
   }
-  
+
   &::before {
     width: 600px;
     height: 600px;
@@ -23,7 +24,7 @@
     top: -100px;
     left: -200px;
   }
-  
+
   &::after {
     width: 500px;
     height: 500px;
@@ -35,14 +36,14 @@
   // Hero section
   .policy-hero {
     position: relative;
-    padding: 140px 5% 80px 5%;
+    padding: 8px 5% 80px 5%;
     text-align: center;
     z-index: 1;
 
     &__content {
       max-width: 800px;
       margin: 0 auto;
-      
+
       h1 {
         font-family: "Outfit", sans-serif;
         font-weight: 800;
@@ -111,7 +112,7 @@
       border: 1px solid rgba(255, 255, 255, 0.8);
       border-radius: 24px;
       padding: 32px 24px;
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255,255,255,1);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
 
       h3 {
         font-size: 14px;
@@ -220,7 +221,7 @@
       position: relative;
       letter-spacing: -0.5px;
       display: inline-block;
-      
+
       &::after {
         content: '';
         position: absolute;
@@ -254,7 +255,7 @@
         text-decoration: none;
         font-weight: 600;
         position: relative;
-        
+
         &::after {
           content: '';
           position: absolute;
@@ -367,6 +368,7 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -416,10 +418,10 @@
 
   @media (max-width: 480px) {
     .policy-hero {
-      padding: 120px 5% 40px 5%;
+      padding: 10px 5% 40px 5%;
 
       h1 {
-        font-size: 40px;
+        font-size: 31px;
       }
 
       .policy-hero__subtitle {

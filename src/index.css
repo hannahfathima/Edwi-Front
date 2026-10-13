@@ -21,13 +21,13 @@ ul {
     list-style: none;
 }
 
-/* Breadcrumb global responsive offset to clear absolute Navbar */
-.breadcrumb-container,
-.contact-breadcrumb,
-div:has(> .breadcrumb) {
+/* Breadcrumb responsive offset to clear absolute Navbar, excluding Cart & pages with built-in navbar offset */
+:not(.cart-page-container):not(.Product-page-wrapper) > div:has(> .breadcrumb),
+.contact-breadcrumb {
     padding-top: 90px !important;
 
     @media (max-width: 991px) {
         padding-top: 105px !important;
     }
 }
+
