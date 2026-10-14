@@ -47,30 +47,56 @@ const Navbar = ({ setCurrentPage }) => {
         };
     }, [isAnyModalOpen]);
 
+    // 🔥 Mobile Menu State
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
     // 🔥 NEW: Get current route
     const location = useLocation();
 
     // 🔥 NEW: Check if current page is home
     const isHome = location.pathname === "/";
 
-    const handleNavClick = () => {
-        const collapseElement = document.getElementById('navbarSupportedContent');
-        if (collapseElement && window.bootstrap) {
-            const bsCollapse = window.bootstrap.Collapse.getInstance(collapseElement);
-            if (bsCollapse) {
-                bsCollapse.hide();
-            }
+    // Lock body scroll when mobile menu is open, unlock when closed or unmounted
+    React.useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.classList.add('menu-open');
+        } else {
+            document.body.classList.remove('menu-open');
         }
+
+        return () => {
+            document.body.classList.remove('menu-open');
+        };
+    }, [isMobileMenuOpen]);
+
+    // Automatically close mobile menu on route change
+    React.useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [location.pathname, location.search]);
+
+    // Close mobile menu on desktop resize
+    React.useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 992) {
+                setIsMobileMenuOpen(false);
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const handleNavClick = () => {
+        setIsMobileMenuOpen(false);
         document.body.classList.remove('menu-open');
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleMenuOpen = () => {
-        document.body.classList.add('menu-open');
+        setIsMobileMenuOpen(true);
     };
 
     const handleMenuClose = () => {
-        document.body.classList.remove('menu-open');
+        setIsMobileMenuOpen(false);
     };
 
     // 🔥 NEW: Check active route
@@ -94,6 +120,7 @@ const Navbar = ({ setCurrentPage }) => {
                     to="/"
                     className="navbar-brand d-flex align-items-center"
                     style={{ cursor: "pointer", width: "55px", marginRight: '2rem' }}
+                    onClick={handleNavClick}
                 >
                     <img src="/Images/Edhwi-logo.svg" alt="edhwi" style={{ width: '100%', height: 'auto' }} />
 
@@ -104,14 +131,13 @@ const Navbar = ({ setCurrentPage }) => {
                     className="navbar-toggler border-0 shadow-none px-0"
                     type="button"
                     onClick={handleMenuOpen}
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent"
+                    aria-label="Open menu"
                 >
                     <FiMenu size={28} color={isHome ? "#fff" : "#000"} />
                 </button>
 
                 {/* Collapsible Content */}
-                <div className="collapse navbar-collapse custom-mobile-menu" id="navbarSupportedContent">
+                <div className={`collapse navbar-collapse custom-mobile-menu ${isMobileMenuOpen ? 'show' : ''}`} id="navbarSupportedContent">
 
                     {/* Mobile Only Header with Wave & Close */}
                     <div className="mobile-menu-header d-lg-none position-absolute top-0 start-0 w-100">
@@ -123,8 +149,6 @@ const Navbar = ({ setCurrentPage }) => {
                             className="mobile-menu-close-btn"
                             type="button"
                             onClick={handleMenuClose}
-                            data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent"
                             aria-label="Close menu"
                         >
                             <FiX size={26} color="#ffffff" />
@@ -133,7 +157,9 @@ const Navbar = ({ setCurrentPage }) => {
 
                     {/* Mobile Only Logo */}
                     <div className="mobile-menu-logo d-lg-none text-center position-relative mt-5 pt-4 mb-4" style={{ zIndex: 10 }}>
-                        <img src="/Images/Edhwi-logo.svg" alt="edhwi" style={{ width: '90px', height: 'auto' }} />
+                        <Link to="/" onClick={handleNavClick}>
+                            <img src="/Images/Edhwi-logo.svg" alt="edhwi" style={{ width: '90px', height: 'auto' }} />
+                        </Link>
                     </div>
 
                     {/* Center Menu */}
@@ -177,6 +203,7 @@ const Navbar = ({ setCurrentPage }) => {
                             onClick={(e) => {
                                 if (!token && !user) {
                                     e.preventDefault();
+                                    handleMenuClose();
                                     dispatch(setLoginModalOpen(true));
                                 } else {
                                     handleNavClick();
@@ -196,6 +223,7 @@ const Navbar = ({ setCurrentPage }) => {
                             onClick={(e) => {
                                 if (!token && !user) {
                                     e.preventDefault();
+                                    handleMenuClose();
                                     dispatch(setLoginModalOpen(true));
                                 } else {
                                     handleNavClick();
@@ -215,6 +243,7 @@ const Navbar = ({ setCurrentPage }) => {
                             onClick={(e) => {
                                 if (!token && !user) {
                                     e.preventDefault();
+                                    handleMenuClose();
                                     dispatch(setLoginModalOpen(true));
                                 } else {
                                     handleNavClick();
@@ -246,8 +275,6 @@ const Navbar = ({ setCurrentPage }) => {
                             <button
                                 className="navbar__login-btn w-100 d-lg-none mt-4 mx-auto"
                                 style={{ maxWidth: '250px', backgroundColor: "#dc3545", color: "white", borderColor: "#dc3545" }}
-                                data-bs-toggle="collapse"
-                                data-bs-target=".navbar-collapse.show"
                                 onClick={() => {
                                     setIsLogoutModalOpen(true);
                                     handleMenuClose();
@@ -259,8 +286,6 @@ const Navbar = ({ setCurrentPage }) => {
                             <button
                                 className="navbar__login-btn w-100 d-lg-none mt-4 mx-auto"
                                 style={{ maxWidth: '250px' }}
-                                data-bs-toggle="collapse"
-                                data-bs-target=".navbar-collapse.show"
                                 onClick={() => {
                                     dispatch(setLoginModalOpen(true));
                                     handleMenuClose();
