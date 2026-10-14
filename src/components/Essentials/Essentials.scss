@@ -285,10 +285,13 @@
                 max-height: 75%;
                 object-fit: contain;
                 transform: scale(1.22);
+                // color: red;
             }
 
             &:hover .essentials__product-img {
                 transform: scale(1.26);
+
+            
             }
         }
 
