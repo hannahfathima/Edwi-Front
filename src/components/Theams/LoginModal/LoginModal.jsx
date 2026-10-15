@@ -13,15 +13,20 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
     const dispatch = useDispatch();
     const { loading, loginError } = useSelector((state) => state.auth);
 
+    const resetForm = () => {
+        setLoginId('');
+        setLocalError('');
+    };
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
             dispatch(clearLoginError());
-            setLocalError('');
+            resetForm();
         } else {
             document.body.style.overflow = 'unset';
             dispatch(clearLoginError());
-            setLocalError('');
+            resetForm();
         }
 
         return () => {
@@ -30,10 +35,16 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
         };
     }, [isOpen, dispatch]);
 
+    const handleClose = () => {
+        resetForm();
+        onClose();
+    };
+
     const login = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             const resultAction = await dispatch(loginWithGoogle(tokenResponse.access_token));
             if (resultAction.payload?.success) {
+                resetForm();
                 onClose();
             }
         },
@@ -54,24 +65,35 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
             return;
         }
 
-        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginId);
-        const isMobile = /^\d{10}$/.test(loginId);
+        const trimmedId = loginId.trim();
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedId);
+        const isMobile = /^\d{10}$/.test(trimmedId);
 
         if (!isEmail && !isMobile) {
             setLocalError('Please enter a valid 10-digit mobile number or email address.');
             return;
         }
 
-        const action = isEmail ? sendEmailOtp(loginId) : sendMobileOtp(loginId);
+        const action = isEmail ? sendEmailOtp(trimmedId) : sendMobileOtp(trimmedId);
         const resultAction = await dispatch(action);
 
         if (resultAction.payload?.success) {
-            onOtpRequest({ type: isEmail ? 'email' : 'mobile', value: loginId });
+            resetForm();
+            onOtpRequest({ type: isEmail ? 'email' : 'mobile', value: trimmedId });
         }
     };
 
+    const handleSignupClick = () => {
+        const trimmedId = loginId.trim();
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedId);
+        // Only forward if it's an email address. Never forward a mobile number into the email address field.
+        const emailToPass = isEmail ? trimmedId : '';
+        resetForm();
+        onSignupRequest(emailToPass);
+    };
+
     return (
-        <div className="login-modal-overlay" onClick={onClose}>
+        <div className="login-modal-overlay" onClick={handleClose}>
             <div className="login-modal-content" onClick={(e) => e.stopPropagation()}>
 
                 {/* Left Side: Image */}
@@ -85,7 +107,7 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
 
                 {/* Right Side: Form */}
                 <div className="login-modal__form-wrapper">
-                    <button className="login-modal__close" onClick={onClose} aria-label="Close modal">
+                    <button className="login-modal__close" onClick={handleClose} aria-label="Close modal">
                         <FiX />
                     </button>
 
@@ -108,6 +130,7 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
                                 }}
                                 placeholder="Mobile Number"
                                 className="form-control"
+                                autoComplete="off"
                                 required
                             />
                         </div>
@@ -132,7 +155,7 @@ const LoginModal = ({ isOpen, onClose, onOtpRequest, onSignupRequest }) => {
                             <FcGoogle size={20} className="social-icon" />
                             Continue with Google
                         </button>
-                        <button className="social-btn facebook-btn" onClick={() => onSignupRequest(loginId)} style={{ backgroundColor: "#333", color: "white", borderColor: "#333" }} type="button">
+                        <button className="social-btn facebook-btn" onClick={handleSignupClick} style={{ backgroundColor: "#333", color: "white", borderColor: "#333" }} type="button">
                             Sign up manually
                         </button>
                     </div>

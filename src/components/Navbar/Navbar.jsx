@@ -304,6 +304,7 @@ const Navbar = ({ setCurrentPage }) => {
                 onClose={() => {
                     dispatch(setLoginModalOpen(false));
                     dispatch(clearLoginError());
+                    setOtpSessionData(null);
                 }}
                 onOtpRequest={(data) => {
                     setOtpSessionData(data);
@@ -312,7 +313,8 @@ const Navbar = ({ setCurrentPage }) => {
                     setIsOtpModalOpen(true);
                 }}
                 onSignupRequest={(email) => {
-                    setOtpSessionData({ value: email });
+                    const isEmail = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                    setOtpSessionData(isEmail ? { value: email } : null);
                     dispatch(setLoginModalOpen(false));
                     dispatch(clearLoginError());
                     setIsSignupModalOpen(true);
@@ -323,11 +325,13 @@ const Navbar = ({ setCurrentPage }) => {
                 isOpen={isOtpModalOpen}
                 onClose={() => {
                     setIsOtpModalOpen(false);
+                    setOtpSessionData(null);
                     dispatch(clearOtpError());
                 }}
                 formData={otpSessionData}
                 onSuccess={(payload) => {
                     setIsOtpModalOpen(false);
+                    setOtpSessionData(null);
                 }}
             />
 
@@ -335,12 +339,17 @@ const Navbar = ({ setCurrentPage }) => {
                 isOpen={isSignupModalOpen}
                 onClose={() => {
                     setIsSignupModalOpen(false);
+                    setOtpSessionData(null);
                     dispatch(clearSignupError());
                 }}
                 initialEmail={otpSessionData?.value || ''}
-                onSuccess={() => setIsSignupModalOpen(false)}
+                onSuccess={() => {
+                    setIsSignupModalOpen(false);
+                    setOtpSessionData(null);
+                }}
                 onLoginRequest={() => {
                     setIsSignupModalOpen(false);
+                    setOtpSessionData(null);
                     dispatch(clearSignupError());
                     dispatch(setLoginModalOpen(true));
                 }}

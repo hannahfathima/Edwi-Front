@@ -103,15 +103,24 @@
                     select {
                         border: none !important;
                         background-color: transparent !important;
-                        // background-color: red;
-                        width: 80px !important;
-                        font-family: DM Sans;
+                        width: auto !important;
+                        min-width: 130px;
+                        font-family: 'DM Sans', sans-serif;
                         font-weight: 400;
                         font-size: 16px;
-
+                        color: #1B1919;
+                        cursor: pointer;
+                        padding-right: 0.25rem;
 
                         &:focus {
                             outline: none;
+                        }
+
+                        option {
+                            font-family: 'DM Sans', sans-serif;
+                            font-size: 15px;
+                            color: #1B1919;
+                            background-color: #ffffff;
                         }
                     }
 

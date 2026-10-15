@@ -250,6 +250,14 @@ const ExploreProducts = () => {
             case 'price-high-to-low':
                 filtered.sort((a, b) => (b.price || b.sellingPrice || 0) - (a.price || a.sellingPrice || 0));
                 break;
+            case 'newest':
+                filtered.sort((a, b) => {
+                    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                    if (dateB !== dateA) return dateB - dateA;
+                    return (b.id || 0) - (a.id || 0);
+                });
+                break;
             case 'name':
             default:
                 filtered.sort((a, b) => {

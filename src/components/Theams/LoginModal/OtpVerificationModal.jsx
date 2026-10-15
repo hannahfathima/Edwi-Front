@@ -12,15 +12,20 @@ const OtpVerificationModal = ({ isOpen, onClose, onSuccess, formData }) => {
     const dispatch = useDispatch();
     const { loading, otpError } = useSelector((state) => state.auth);
 
+    const resetOtp = () => {
+        setOtp(['', '', '', '']);
+        setLocalError('');
+    };
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
             dispatch(clearOtpError());
-            setLocalError('');
+            resetOtp();
         } else {
             document.body.style.overflow = 'unset';
             dispatch(clearOtpError());
-            setLocalError('');
+            resetOtp();
         }
 
         return () => {
@@ -28,6 +33,11 @@ const OtpVerificationModal = ({ isOpen, onClose, onSuccess, formData }) => {
             dispatch(clearOtpError());
         };
     }, [isOpen, dispatch]);
+
+    const handleClose = () => {
+        resetOtp();
+        if (onClose) onClose();
+    };
 
     if (!isOpen) return null;
 
@@ -68,19 +78,20 @@ const OtpVerificationModal = ({ isOpen, onClose, onSuccess, formData }) => {
         const resultAction = await dispatch(action);
 
         if (resultAction.payload?.success) {
+            resetOtp();
             onSuccess(resultAction.payload); // Could tell the parent to close and open Signup if isNewUser
         }
     };
 
     return (
-        <div className="login-modal-overlay" onClick={onClose}>
+        <div className="login-modal-overlay" onClick={handleClose}>
             <div className="login-modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="login-modal__image-wrapper">
                     <img src="/Images/Login-modal-IM.svg" alt="Edhwi Coconuts" className="login-modal__image" />
                 </div>
 
                 <div className="login-modal__form-wrapper">
-                    <button className="login-modal__close" onClick={onClose} aria-label="Close modal">
+                    <button className="login-modal__close" onClick={handleClose} aria-label="Close modal">
                         <FiX />
                     </button>
 
@@ -102,6 +113,7 @@ const OtpVerificationModal = ({ isOpen, onClose, onSuccess, formData }) => {
                                         value={digit}
                                         onChange={(e) => handleChange(index, e.target.value)}
                                         onKeyDown={(e) => handleKeyDown(index, e)}
+                                        autoComplete="one-time-code"
                                         style={{
                                             width: "48px",
                                             height: "48px",

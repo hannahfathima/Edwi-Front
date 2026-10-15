@@ -5,14 +5,18 @@ import './LoginModal.scss'; // Assuming we re-use same modal styles
 import { FiX, FiEye, FiEyeOff } from 'react-icons/fi';
 
 const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginRequest }) => {
-    const [formData, setFormData] = useState({
+    const isEmailValid = (email) => Boolean(email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+
+    const initialFormState = {
         name: '',
-        email: initialEmail,
+        email: isEmailValid(initialEmail) ? initialEmail : '',
         password: '',
         confirmPassword: '',
         agreeToTerms: false,
         subscribeToEmails: false
-    });
+    };
+
+    const [formData, setFormData] = useState(initialFormState);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [localError, setLocalError] = useState('');
@@ -20,18 +24,39 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginReq
     const dispatch = useDispatch();
     const { loading, signupError } = useSelector((state) => state.auth);
 
+    const resetForm = () => {
+        setFormData({
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            agreeToTerms: false,
+            subscribeToEmails: false
+        });
+        setShowPassword(false);
+        setShowConfirmPassword(false);
+        setLocalError('');
+    };
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
             dispatch(clearSignupError());
             setLocalError('');
-            if (initialEmail) {
-                setFormData((prev) => ({ ...prev, email: initialEmail }));
-            }
+            setFormData({
+                name: '',
+                email: isEmailValid(initialEmail) ? initialEmail : '',
+                password: '',
+                confirmPassword: '',
+                agreeToTerms: false,
+                subscribeToEmails: false
+            });
+            setShowPassword(false);
+            setShowConfirmPassword(false);
         } else {
             document.body.style.overflow = 'unset';
             dispatch(clearSignupError());
-            setLocalError('');
+            resetForm();
         }
 
         return () => {
@@ -39,6 +64,17 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginReq
             dispatch(clearSignupError());
         };
     }, [isOpen, initialEmail, dispatch]);
+
+    const handleClose = () => {
+        resetForm();
+        if (onClose) onClose();
+    };
+
+    const handleLoginClick = () => {
+        resetForm();
+        if (onClose) onClose();
+        if (onLoginRequest) onLoginRequest();
+    };
 
     if (!isOpen) return null;
 
@@ -89,6 +125,11 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginReq
             return;
         }
 
+        if (!isEmailValid(formData.email.trim())) {
+            setLocalError('Please enter a valid email address');
+            return;
+        }
+
         if (formData.password !== formData.confirmPassword) {
             setLocalError('Passwords do not match');
             return;
@@ -98,19 +139,20 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginReq
         const resultAction = await dispatch(signupWithEmail(signupData));
 
         if (resultAction.payload?.success) {
+            resetForm();
             onSuccess(); // Close modal on success
         }
     };
 
     return (
-        <div className="login-modal-overlay" onClick={onClose}>
+        <div className="login-modal-overlay" onClick={handleClose}>
             <div className="login-modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="login-modal__image-wrapper">
                     <img src="/Images/Login-modal-IM.svg" alt="Edhwi Coconuts" className="login-modal__image" />
                 </div>
 
                 <div className="login-modal__form-wrapper">
-                    <button className="login-modal__close" onClick={onClose} aria-label="Close modal">
+                    <button className="login-modal__close" onClick={handleClose} aria-label="Close modal">
                         <FiX />
                     </button>
 
@@ -131,6 +173,7 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginReq
                                 onKeyDown={handleKeyDown}
                                 className="form-control"
                                 placeholder="Enter your name"
+                                autoComplete="name"
                                 required
                             />
                         </div>
@@ -144,6 +187,8 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginReq
                                 value={formData.email}
                                 onChange={handleChange}
                                 className="form-control"
+                                placeholder="Enter your email"
+                                autoComplete="email"
                                 required
                             />
                         </div>
@@ -159,6 +204,7 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginReq
                                     onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter password"
+                                    autoComplete="new-password"
                                     required
                                 />
                                 <button
@@ -183,6 +229,7 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginReq
                                     onChange={handleChange}
                                     className="form-control"
                                     placeholder="Confirm password"
+                                    autoComplete="new-password"
                                     required
                                 />
                                 <button
@@ -239,10 +286,7 @@ const SignupModal = ({ isOpen, onClose, onSuccess, initialEmail = '', onLoginReq
                             <div style={{ marginTop: "15px", textAlign: "center", fontSize: "13px", color: "#555" }}>
                                 Already have an account?{' '}
                                 <span
-                                    onClick={() => {
-                                        if (onClose) onClose();
-                                        onLoginRequest();
-                                    }}
+                                    onClick={handleLoginClick}
                                     style={{ color: "#1877F2", cursor: "pointer", fontWeight: "600" }}
                                 >
                                     Log in
