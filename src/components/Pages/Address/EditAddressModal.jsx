@@ -4,6 +4,7 @@ import { updateAddress, addAddress } from '../../../redux/slices/addressSlice';
 import { MdClose } from "react-icons/md";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import { toast } from 'react-toastify';
 import './EditAddressModal.scss';
 
 const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInline = false }) => {
@@ -20,11 +21,11 @@ const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInlin
         addressType: 'Home'
     });
 
+    const [errors, setErrors] = useState({});
     const [isPincodeValidating, setIsPincodeValidating] = useState(false);
-    const [pincodeError, setPincodeError] = useState('');
 
     useEffect(() => {
-        if (!isOpen) return;
+        if (!isOpen && !isInline) return;
 
         if (mode === 'edit' && addressData) {
             let phoneVal = addressData.phone || '';
@@ -38,7 +39,7 @@ const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInlin
                 zipCode: addressData.zipCode || '',
                 addressType: addressData.addressType === 'work' || addressData.addressType === 'Office' ? 'Office' : 'Home'
             });
-            setPincodeError('');
+            setErrors({});
         } else if (mode === 'add') {
             setFormData({
                 fullName: '',
@@ -49,9 +50,9 @@ const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInlin
                 zipCode: '',
                 addressType: 'Home'
             });
-            setPincodeError('');
+            setErrors({});
         }
-    }, [addressData, isOpen, mode]);
+    }, [addressData, isOpen, mode, isInline]);
 
     useEffect(() => {
         if (isOpen && !isInline) {
@@ -70,66 +71,99 @@ const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInlin
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
     };
 
-    const handleSaveAddress = async () => {
-        setPincodeError('');
+    const validateForm = () => {
+        const newErrors = {};
 
-        if (!formData.fullName || formData.fullName.length < 2) {
-            alert('Please enter a valid full name.');
-            return;
+        // Full Name validation
+        const trimmedName = (formData.fullName || '').trim();
+        if (!trimmedName) {
+            newErrors.fullName = 'Full name is required';
+        } else if (trimmedName.length < 2) {
+            newErrors.fullName = 'Full name must be at least 2 characters';
+        } else if (!/^[a-zA-Z\s.'-]+$/.test(trimmedName)) {
+            newErrors.fullName = 'Full name should only contain letters and spaces';
         }
 
-        const cleanPhone = formData.phone.replace(/\D/g, '');
+        // Phone validation
+        const cleanPhone = (formData.phone || '').toString().replace(/\D/g, '');
         const is10Digit = /^[6-9]\d{9}$/.test(cleanPhone);
         const is12Digit = /^91[6-9]\d{9}$/.test(cleanPhone);
 
-        if (!cleanPhone || (!is10Digit && !is12Digit)) {
-            alert('Please enter a valid 10 or 12-digit Indian mobile number (starting with 6-9).');
-            return;
+        if (!cleanPhone) {
+            newErrors.phone = 'Phone number is required';
+        } else if (!is10Digit && !is12Digit) {
+            newErrors.phone = 'Enter a valid 10-digit mobile number starting with 6-9';
         }
 
-        if (!formData.addressLine1) {
-            alert('Address line 1 is required.');
-            return;
+        // Address Line 1 validation
+        const trimmedAddress1 = (formData.addressLine1 || '').trim();
+        if (!trimmedAddress1) {
+            newErrors.addressLine1 = 'Address line 1 is required';
+        } else if (trimmedAddress1.length < 5) {
+            newErrors.addressLine1 = 'Please enter a complete address (minimum 5 characters)';
         }
 
-        if (!formData.state) {
-            alert('State is required.');
-            return;
+        // State validation
+        const trimmedState = (formData.state || '').trim();
+        if (!trimmedState) {
+            newErrors.state = 'State / City is required';
+        } else if (trimmedState.length < 2) {
+            newErrors.state = 'Please enter a valid state or city';
         }
 
-        if (!formData.zipCode || formData.zipCode.length !== 6) {
-            alert('Please enter a valid 6-digit pin code.');
+        // Pincode validation
+        const cleanZip = (formData.zipCode || '').trim();
+        if (!cleanZip) {
+            newErrors.zipCode = 'Pin code is required';
+        } else if (!/^\d{6}$/.test(cleanZip)) {
+            newErrors.zipCode = 'Pin code must be exactly 6 digits';
+        }
+
+        setErrors(newErrors);
+        return newErrors;
+    };
+
+    const handleSaveAddress = async () => {
+        const fieldErrors = validateForm();
+        if (Object.keys(fieldErrors).length > 0) {
+            toast.error('Please fix the errors before saving');
             return;
         }
 
         setIsPincodeValidating(true);
         try {
-            const response = await fetch(`https://api.postalpincode.in/pincode/${formData.zipCode}`);
+            const response = await fetch(`https://api.postalpincode.in/pincode/${formData.zipCode.trim()}`);
             const data = await response.json();
 
-            if (!data || data[0].Status === 'Error') {
-                setPincodeError('Invalid Pincode. Please check and try again.');
+            if (!data || !data[0] || data[0].Status === 'Error') {
+                setErrors(prev => ({ ...prev, zipCode: 'Invalid Pin code. Please enter a valid Indian postal code.' }));
                 setIsPincodeValidating(false);
+                toast.error('Invalid Pin code');
                 return;
             }
         } catch (error) {
             console.error('Pincode validation failed:', error);
-            setPincodeError('Could not validate pincode right now.');
-            setIsPincodeValidating(false);
-            return;
         }
         setIsPincodeValidating(false);
 
+        const cleanPhone = formData.phone.replace(/\D/g, '');
+        const formattedPhone = cleanPhone.startsWith('91') && cleanPhone.length === 12
+            ? '+' + cleanPhone
+            : '+91' + cleanPhone;
+
         const addressPayload = {
-            fullName: formData.fullName,
-            phone: '+' + formData.phone.replace(/\D/g, ''),
-            addressLine1: formData.addressLine1,
-            addressLine2: formData.addressLine2,
-            state: formData.state,
-            zipCode: formData.zipCode,
-            city: formData.state,
+            fullName: formData.fullName.trim(),
+            phone: formattedPhone,
+            addressLine1: formData.addressLine1.trim(),
+            addressLine2: formData.addressLine2 ? formData.addressLine2.trim() : '',
+            state: formData.state.trim(),
+            zipCode: formData.zipCode.trim(),
+            city: formData.state.trim(),
             country: 'India',
             addressType: formData.addressType
         };
@@ -143,9 +177,11 @@ const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInlin
         }
 
         if (updateAddress.fulfilled.match(resultAction) || addAddress.fulfilled.match(resultAction)) {
+            toast.success(mode === 'add' ? 'Address added successfully!' : 'Address updated successfully!');
             if (onClose) onClose();
         } else {
-            alert(resultAction.payload || `Failed to ${mode} address`);
+            const errorMsg = resultAction.payload || `Failed to ${mode} address`;
+            toast.error(errorMsg);
         }
     };
 
@@ -154,7 +190,7 @@ const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInlin
             {!isInline && (
                 <div className="edit-modal-header">
                     <h2>{mode === 'add' ? 'Add new address' : 'Edit address'}</h2>
-                    <button className="close-btn" onClick={onClose}>
+                    <button className="close-btn" onClick={onClose} type="button">
                         <MdClose size={24} color="#666" />
                     </button>
                 </div>
@@ -163,82 +199,92 @@ const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInlin
             <div className={`edit-modal-body ${isInline ? 'inline-body' : ''}`}>
                 <div className="form-row">
                     <div className="form-group">
-                        <label>Email your full name*</label>
+                        <label>Enter your full name*</label>
                         <input
                             type="text"
-                            className="modal-input"
+                            className={`modal-input ${errors.fullName ? 'error' : ''}`}
                             name="fullName"
                             value={formData.fullName}
                             onChange={handleInputChange}
-                            placeholder="James Jacobe |"
+                            placeholder="Enter full name"
                         />
+                        {errors.fullName && <span className="error-text">{errors.fullName}</span>}
                     </div>
                     <div className="form-group">
-                        <label>Phone</label>
-                        <div className="phone-input-wrapper">
+                        <label>Phone*</label>
+                        <div className={`phone-input-wrapper ${errors.phone ? 'phone-error' : ''}`}>
                             <PhoneInput
                                 country={'in'}
                                 value={formData.phone}
-                                onChange={phone => setFormData(prev => ({ ...prev, phone }))}
+                                onChange={phone => {
+                                    setFormData(prev => ({ ...prev, phone }));
+                                    if (errors.phone) setErrors(prev => ({ ...prev, phone: '' }));
+                                }}
                                 inputStyle={{ width: '100%', height: '44px', fontSize: '14px', borderRadius: '8px' }}
                                 containerStyle={{ width: '100%', margin: 0 }}
                                 enableSearch={true}
                                 disableSearchIcon={true}
                             />
                         </div>
+                        {errors.phone && <span className="error-text">{errors.phone}</span>}
                     </div>
                 </div>
 
                 <div className="form-row">
                     <div className="form-group">
-                        <label>Address line 1</label>
+                        <label>Address line 1*</label>
                         <input
                             type="text"
-                            className="modal-input"
+                            className={`modal-input ${errors.addressLine1 ? 'error' : ''}`}
                             name="addressLine1"
                             value={formData.addressLine1}
                             onChange={handleInputChange}
-                            placeholder="Enter address here"
+                            placeholder="House / Flat no., Building, Street"
                         />
+                        {errors.addressLine1 && <span className="error-text">{errors.addressLine1}</span>}
                     </div>
                     <div className="form-group">
-                        <label>Address line 2</label>
+                        <label>Address line 2 (Optional)</label>
                         <input
                             type="text"
                             className="modal-input"
                             name="addressLine2"
                             value={formData.addressLine2}
                             onChange={handleInputChange}
-                            placeholder="Enter address here"
+                            placeholder="Landmark, Area, Apartment (optional)"
                         />
                     </div>
                 </div>
 
                 <div className="form-row">
                     <div className="form-group">
-                        <label>State</label>
+                        <label>State / City*</label>
                         <input
                             type="text"
-                            className="modal-input"
+                            className={`modal-input ${errors.state ? 'error' : ''}`}
                             name="state"
                             value={formData.state}
                             onChange={handleInputChange}
+                            placeholder="Enter state or city"
                         />
+                        {errors.state && <span className="error-text">{errors.state}</span>}
                     </div>
                     <div className="form-group">
-                        <label>Pin code</label>
+                        <label>Pin code*</label>
                         <input
                             type="text"
-                            className={`modal-input ${pincodeError ? 'error' : ''}`}
+                            className={`modal-input ${errors.zipCode ? 'error' : ''}`}
                             name="zipCode"
                             maxLength="6"
+                            placeholder="6-digit PIN code"
                             value={formData.zipCode}
                             onChange={(e) => {
                                 const val = e.target.value.replace(/\D/g, '');
                                 setFormData(prev => ({ ...prev, zipCode: val }));
+                                if (errors.zipCode) setErrors(prev => ({ ...prev, zipCode: '' }));
                             }}
                         />
-                        {pincodeError && <span className="error-text">{pincodeError}</span>}
+                        {errors.zipCode && <span className="error-text">{errors.zipCode}</span>}
                     </div>
                 </div>
 
@@ -246,12 +292,14 @@ const EditAddressModal = ({ isOpen, onClose, addressData, mode = 'edit', isInlin
                     <label>Save address as</label>
                     <div className="type-selector">
                         <button
+                            type="button"
                             className={`type-btn ${formData.addressType === 'Home' ? 'active' : ''}`}
                             onClick={() => setFormData({ ...formData, addressType: 'Home' })}
                         >
                             Home
                         </button>
                         <button
+                            type="button"
                             className={`type-btn ${formData.addressType === 'Office' ? 'active' : ''}`}
                             onClick={() => setFormData({ ...formData, addressType: 'Office' })}
                         >

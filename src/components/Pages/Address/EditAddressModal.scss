@@ -126,6 +126,12 @@
         .phone-input-wrapper {
             width: 100%;
 
+            &.phone-error {
+                .react-tel-input .form-control {
+                    border-color: #dc3545 !important;
+                }
+            }
+
             .react-tel-input {
                 width: 100%;
                 font-family: inherit;
