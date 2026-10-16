@@ -23,16 +23,17 @@ const ContactUs = () => {
     const { name, value } = e.target;
 
     if (name === 'firstName') {
-      if (/\d/.test(value)) {
+      // Disallow numbers and special characters (only allow letters and spaces)
+      if (/[^a-zA-Z\s]/.test(value)) {
         setErrors((prev) => ({
           ...prev,
-          firstName: 'Numbers are not allowed in name'
+          firstName: 'Numbers and special characters are not allowed in name'
         }));
       } else if (errors.firstName) {
         setErrors((prev) => ({ ...prev, firstName: '' }));
       }
 
-      const filteredValue = value.replace(/\d/g, '');
+      const filteredValue = value.replace(/[^a-zA-Z\s]/g, '');
       setFormData((prev) => ({ ...prev, firstName: filteredValue }));
       return;
     }
@@ -44,12 +45,15 @@ const ContactUs = () => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.target.name === 'firstName' && /^[0-9]$/.test(e.key)) {
-      e.preventDefault();
-      setErrors((prev) => ({
-        ...prev,
-        firstName: 'Numbers are not allowed in name'
-      }));
+    // Allow navigation/editing keys like Backspace, Delete, Tab, Arrow keys, etc.
+    if (e.target.name === 'firstName') {
+      if (e.key.length === 1 && !/^[a-zA-Z\s]$/.test(e.key)) {
+        e.preventDefault();
+        setErrors((prev) => ({
+          ...prev,
+          firstName: 'Numbers and special characters are not allowed in name'
+        }));
+      }
     }
   };
 
@@ -65,8 +69,8 @@ const ContactUs = () => {
 
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
-    } else if (/\d/.test(formData.firstName)) {
-      newErrors.firstName = 'Numbers are not allowed in name';
+    } else if (/[^a-zA-Z\s]/.test(formData.firstName)) {
+      newErrors.firstName = 'Numbers and special characters are not allowed in name';
     }
 
     if (!phone || phone.trim().length === 0) {
